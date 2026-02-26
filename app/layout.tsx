@@ -17,9 +17,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Morfi-Plan - Planificación Semanal de Comidas',
+  title: 'Morfi-Plan',
   description: 'Planifica tus comidas semanales, gestiona menús y recibe listas de compras',
   keywords: ['comidas', 'planificación', 'menú semanal', 'lista de compras'],
+  icons: {
+    icon: '/favicon.svg',
+    apple: '/apple-icon.svg',
+  },
 };
 
 export const viewport: Viewport = {

@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   CalendarDays,
   Clock,
@@ -16,8 +15,6 @@ import {
   UtensilsCrossed,
   BookOpen,
   Plus,
-  ChevronDown,
-  List,
 } from 'lucide-react';
 import { jsonBinClient } from '@/lib/jsonbin';
 import {
@@ -73,7 +70,6 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [currentMeal, setCurrentMeal] = useState<ReturnType<typeof getCurrentDayMeal>>(null);
   const [currentHour, setCurrentHour] = useState<number>(new Date().getHours());
-  const [ingredientsOpen, setIngredientsOpen] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -147,89 +143,72 @@ export default function Dashboard() {
         </Link>
 
         <Link href="/asignar">
-          <Button variant="default" size="sm" className="gap-1 h-8 bg-green-600 hover:bg-green-700">
+          <Button
+            variant="default"
+            size="sm"
+            className="gap-1 h-8 bg-green-600 hover:bg-green-700 text-white"
+          >
             <CalendarDays className="w-3.5 h-3.5" />
             <span className="text-xs">Editar</span>
           </Button>
         </Link>
       </div>
 
-      {/* Comida del Día - AHORA PRIMERO */}
-      {currentMeal && (
-        <Card className="overflow-hidden relative border-0 shadow-lg mb-6">
-          {currentMeal.menu?.image ? (
-            <>
-              {/* Background Image */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={currentMeal.menu.image}
-                alt={currentMeal.menu.name}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/60 to-black/30" />
-              {/* Content */}
-              <div className="relative z-10 p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <Clock className="w-4 h-4 text-white/80" />
-                  <span className="text-sm font-medium text-white/80">{currentMeal.label}</span>
-                </div>
-                <div className="flex items-center gap-2 mb-3">
-                  <Badge className="bg-white/20 text-white border-0 text-xs">
-                    {DAYS_OF_WEEK.find(d => d.value === currentMeal.day)?.fullLabel}
-                  </Badge>
-                  <Badge className="bg-green-500 text-white border-0 text-xs">
-                    {MEAL_TYPES.find(m => m.value === currentMeal.mealType)?.label}
-                  </Badge>
-                </div>
-                <h3 className="text-2xl font-bold text-white drop-shadow-lg mb-4">
-                  {currentMeal.menu.name}
-                </h3>
+      {/* Comida del Día - Con menú */}
+      {currentMeal && currentMeal.menu && (
+        <Link href={`/menus/${currentMeal.menu.id}`}>
+          <Card className="overflow-hidden relative border-0 shadow-lg mb-6 cursor-pointer transition-shadow hover:shadow-xl">
+            {currentMeal.menu.image ? (
+              <>
+                {/* Background Image */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={currentMeal.menu.image}
+                  alt={currentMeal.menu.name}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/60 to-black/30" />
+                {/* Content */}
+                <div className="relative z-10 p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Clock className="w-4 h-4 text-white/80" />
+                    <span className="text-sm font-medium text-white/80">{currentMeal.label}</span>
+                  </div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Badge className="bg-white/20 text-white border-0 text-xs">
+                      {DAYS_OF_WEEK.find(d => d.value === currentMeal.day)?.fullLabel}
+                    </Badge>
+                    <Badge className="bg-green-500 text-white border-0 text-xs">
+                      {MEAL_TYPES.find(m => m.value === currentMeal.mealType)?.label}
+                    </Badge>
+                  </div>
+                  <h3 className="text-2xl font-bold text-white drop-shadow-lg mb-4">
+                    {currentMeal.menu.name}
+                  </h3>
 
-                {/* Ingredientes expandibles */}
-                <Collapsible open={ingredientsOpen} onOpenChange={setIngredientsOpen}>
-                  <CollapsibleTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="justify-between h-9 text-sm text-white/90 hover:bg-white/20 hover:text-white px-3 -ml-3 bg-white/10 backdrop-blur-sm rounded-lg"
-                    >
-                      <span className="flex items-center gap-2">
-                        <List className="w-4 h-4" />
-                        Ver ingredientes ({currentMeal.menu.ingredients.length})
-                      </span>
-                      <ChevronDown
-                        className={`w-4 h-4 transition-transform ${ingredientsOpen ? 'rotate-180' : ''}`}
-                      />
-                    </Button>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <div className="mt-3 p-3 bg-black/40 backdrop-blur-sm rounded-lg border border-white/20">
-                      <div className="flex flex-wrap gap-2">
-                        {currentMeal.menu.ingredients.map((ingredient, idx) => (
-                          <Badge
-                            key={idx}
-                            className="text-sm font-normal capitalize bg-white/20 text-white border-0"
-                          >
-                            {ingredient}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  </CollapsibleContent>
-                </Collapsible>
-              </div>
-            </>
-          ) : (
-            <>
-              <CardHeader className="pb-3 pt-4 bg-linear-to-r from-green-600 to-green-500">
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-white" />
-                  <CardTitle className="text-base text-white">{currentMeal.label}</CardTitle>
+                  {/* Ingredientes */}
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {currentMeal.menu.ingredients.map((ingredient, idx) => (
+                      <Badge
+                        key={idx}
+                        className="text-sm font-normal capitalize bg-white/20 text-white border-0 backdrop-blur-sm"
+                      >
+                        {ingredient}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
-              </CardHeader>
-              <CardContent className="pt-4">
-                {currentMeal.menu ? (
+              </>
+            ) : (
+              <>
+                <CardHeader className="pb-3 pt-4 bg-linear-to-r from-green-600 to-green-500">
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-white" />
+                    <CardTitle className="text-base text-white">{currentMeal.label}</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-4">
                   <div>
                     <div className="flex items-start gap-4 mb-3">
                       <div className="w-20 h-20 rounded-xl bg-muted flex items-center justify-center flex-shrink-0 border-2 border-border">
@@ -250,65 +229,57 @@ export default function Dashboard() {
                       </div>
                     </div>
 
-                    {/* Ingredientes expandibles */}
-                    <Collapsible open={ingredientsOpen} onOpenChange={setIngredientsOpen}>
-                      <CollapsibleTrigger asChild>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="w-full justify-between h-8 text-xs bg-white hover:bg-gray-50"
+                    {/* Ingredientes */}
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {currentMeal.menu.ingredients.map((ingredient, idx) => (
+                        <Badge
+                          key={idx}
+                          variant="secondary"
+                          className="text-xs font-normal capitalize"
                         >
-                          <span className="flex items-center gap-2">
-                            <List className="w-3.5 h-3.5" />
-                            Ver ingredientes ({currentMeal.menu.ingredients.length})
-                          </span>
-                          <ChevronDown
-                            className={`w-4 h-4 transition-transform ${ingredientsOpen ? 'rotate-180' : ''}`}
-                          />
-                        </Button>
-                      </CollapsibleTrigger>
-                      <CollapsibleContent>
-                        <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                          <div className="flex flex-wrap gap-1.5">
-                            {currentMeal.menu.ingredients.map((ingredient, idx) => (
-                              <Badge
-                                key={idx}
-                                variant="secondary"
-                                className="text-xs font-normal capitalize"
-                              >
-                                {ingredient}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      </CollapsibleContent>
-                    </Collapsible>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-4">
-                    <div className="w-20 h-20 rounded-xl bg-muted flex items-center justify-center flex-shrink-0 border-2 border-border">
-                      <UtensilsCrossed className="w-8 h-8 text-muted-foreground" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-base font-semibold text-foreground mb-0.5">
-                        Sin menú asignado
-                      </h3>
-                      <p className="text-xs text-muted-foreground mb-2">
-                        No hay {currentMeal.mealType === 'almuerzo' ? 'almuerzo' : 'cena'} asignado
-                        para hoy
-                      </p>
-                      <Link href="/asignar">
-                        <Button size="sm" className="h-7 text-xs bg-green-600 hover:bg-green-700">
-                          <Plus className="w-3.5 h-3.5 mr-1" />
-                          Asignar {currentMeal.mealType === 'almuerzo' ? 'Almuerzo' : 'Cena'}
-                        </Button>
-                      </Link>
+                          {ingredient}
+                        </Badge>
+                      ))}
                     </div>
                   </div>
-                )}
-              </CardContent>
-            </>
-          )}
+                </CardContent>
+              </>
+            )}
+          </Card>
+        </Link>
+      )}
+
+      {/* Comida del Día - Sin menú asignado */}
+      {currentMeal && !currentMeal.menu && (
+        <Card className="overflow-hidden relative border-0 shadow-lg mb-6">
+          <CardHeader className="pb-3 pt-4 bg-linear-to-r from-green-600 to-green-500">
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-white" />
+              <CardTitle className="text-base text-white">{currentMeal.label}</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-4">
+            <div className="flex items-center gap-4">
+              <div className="w-20 h-20 rounded-xl bg-muted flex items-center justify-center flex-shrink-0 border-2 border-border">
+                <UtensilsCrossed className="w-8 h-8 text-muted-foreground" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-base font-semibold text-foreground mb-0.5">
+                  Sin menú asignado
+                </h3>
+                <p className="text-xs text-muted-foreground mb-2">
+                  No hay {currentMeal.mealType === 'almuerzo' ? 'almuerzo' : 'cena'} asignado para
+                  hoy
+                </p>
+                <Link href="/asignar">
+                  <Button size="sm" className="h-7 text-xs bg-green-600 hover:bg-green-700">
+                    <Plus className="w-3.5 h-3.5 mr-1" />
+                    Asignar {currentMeal.mealType === 'almuerzo' ? 'Almuerzo' : 'Cena'}
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </CardContent>
         </Card>
       )}
 
@@ -339,85 +310,112 @@ export default function Dashboard() {
                     return (
                       <Tooltip key={`${mealType.value}-${weekDay.day}`}>
                         <TooltipTrigger asChild>
-                          <Card
-                            className={`cursor-pointer transition-all hover:shadow-md overflow-hidden relative p-2 gap-2 ${
-                              shouldHighlight ? 'ring-2 ring-green-500 ring-offset-1' : ''
-                            } ${menu ? '' : 'bg-muted/50'}`}
-                          >
-                            {menu?.image ? (
-                              <>
-                                {/* Background Image */}
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                  src={menu.image}
-                                  alt={menu.name}
-                                  className="absolute inset-0 w-full h-full object-cover"
-                                />
-                                {/* Gradient Overlay */}
-                                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-black/20" />
-                                {/* Content */}
-                                <div className="relative z-10 p-2">
-                                  <div className="flex items-center justify-between">
-                                    <span className="font-semibold text-white text-xs drop-shadow-md">
-                                      {weekDay.label}
-                                    </span>
-                                    {isToday && (
-                                      <Badge className="bg-green-500 text-white text-[10px] px-1.5 py-0 border-0">
-                                        Hoy
-                                      </Badge>
-                                    )}
-                                  </div>
-                                  <div>
-                                    <span className="text-[10px] text-white/80 drop-shadow-md">
-                                      {weekDay.date.toLocaleDateString('es-ES', {
-                                        day: 'numeric',
-                                        month: 'short',
-                                      })}
-                                    </span>
-                                    <p className="font-medium text-[10px] text-white line-clamp-2 leading-tight drop-shadow-md mt-0.5">
-                                      {menu.name}
-                                    </p>
-                                  </div>
-                                </div>
-                              </>
-                            ) : (
-                              <>
-                                <CardHeader className="pb-0.5 pt-1.5 px-2">
-                                  <div className="flex items-center justify-between">
-                                    <span className="font-semibold text-foreground text-xs">
-                                      {weekDay.label}
-                                    </span>
-                                    {isToday && (
-                                      <Badge
-                                        variant="secondary"
-                                        className="text-[10px] px-1.5 py-0"
-                                      >
-                                        Hoy
-                                      </Badge>
-                                    )}
-                                  </div>
-                                  <span className="text-[10px] text-muted-foreground leading-none">
-                                    {weekDay.date.toLocaleDateString('es-ES', {
-                                      day: 'numeric',
-                                      month: 'short',
-                                    })}
-                                  </span>
-                                </CardHeader>
-                                <CardContent className="pt-0 pb-1 px-2">
-                                  {menu && (
-                                    <div className="flex items-center gap-1">
-                                      <div className="w-6 h-6 bg-muted rounded flex items-center justify-center flex-shrink-0">
-                                        <ChefHat className="w-3 h-3 text-muted-foreground" />
+                          {menu ? (
+                            <Link href={`/menus/${menu.id}`}>
+                              <Card
+                                className={`cursor-pointer transition-all hover:shadow-md overflow-hidden relative p-2 gap-2 ${
+                                  shouldHighlight ? 'ring-2 ring-green-500 ring-offset-1' : ''
+                                }`}
+                              >
+                                {menu.image ? (
+                                  <>
+                                    {/* Background Image */}
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
+                                      src={menu.image}
+                                      alt={menu.name}
+                                      className="absolute inset-0 w-full h-full object-cover"
+                                    />
+                                    {/* Gradient Overlay */}
+                                    <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-black/20" />
+                                    {/* Content */}
+                                    <div className="relative z-10 p-2">
+                                      <div className="flex items-center justify-between">
+                                        <span className="font-semibold text-white text-xs drop-shadow-md">
+                                          {weekDay.label}
+                                        </span>
+                                        {isToday && (
+                                          <Badge className="bg-green-500 text-white text-[10px] px-1.5 py-0 border-0">
+                                            Hoy
+                                          </Badge>
+                                        )}
                                       </div>
-                                      <p className="font-medium text-[10px] text-foreground line-clamp-1 leading-none">
-                                        {menu.name}
-                                      </p>
+                                      <div>
+                                        <span className="text-[10px] text-white/80 drop-shadow-md">
+                                          {weekDay.date.toLocaleDateString('es-ES', {
+                                            day: 'numeric',
+                                            month: 'short',
+                                          })}
+                                        </span>
+                                        <p className="font-medium text-[10px] text-white line-clamp-2 leading-tight drop-shadow-md mt-0.5">
+                                          {menu.name}
+                                        </p>
+                                      </div>
                                     </div>
+                                  </>
+                                ) : (
+                                  <>
+                                    <CardHeader className="pb-0.5 pt-1.5 px-2">
+                                      <div className="flex items-center justify-between">
+                                        <span className="font-semibold text-foreground text-xs">
+                                          {weekDay.label}
+                                        </span>
+                                        {isToday && (
+                                          <Badge
+                                            variant="secondary"
+                                            className="text-[10px] px-1.5 py-0"
+                                          >
+                                            Hoy
+                                          </Badge>
+                                        )}
+                                      </div>
+                                      <span className="text-[10px] text-muted-foreground leading-none">
+                                        {weekDay.date.toLocaleDateString('es-ES', {
+                                          day: 'numeric',
+                                          month: 'short',
+                                        })}
+                                      </span>
+                                    </CardHeader>
+                                    <CardContent className="pt-0 pb-1 px-2">
+                                      <div className="flex items-center gap-1">
+                                        <div className="w-6 h-6 bg-muted rounded flex items-center justify-center flex-shrink-0">
+                                          <ChefHat className="w-3 h-3 text-muted-foreground" />
+                                        </div>
+                                        <p className="font-medium text-[10px] text-foreground line-clamp-1 leading-none">
+                                          {menu.name}
+                                        </p>
+                                      </div>
+                                    </CardContent>
+                                  </>
+                                )}
+                              </Card>
+                            </Link>
+                          ) : (
+                            <Card
+                              className={`overflow-hidden relative p-2 gap-2 ${
+                                shouldHighlight ? 'ring-2 ring-green-500 ring-offset-1' : ''
+                              } bg-muted/50`}
+                            >
+                              <CardHeader className="pb-0.5 pt-1.5 px-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="font-semibold text-foreground text-xs">
+                                    {weekDay.label}
+                                  </span>
+                                  {isToday && (
+                                    <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+                                      Hoy
+                                    </Badge>
                                   )}
-                                </CardContent>
-                              </>
-                            )}
-                          </Card>
+                                </div>
+                                <span className="text-[10px] text-muted-foreground leading-none">
+                                  {weekDay.date.toLocaleDateString('es-ES', {
+                                    day: 'numeric',
+                                    month: 'short',
+                                  })}
+                                </span>
+                              </CardHeader>
+                            </Card>
+                          )}
                         </TooltipTrigger>
                         {menu && (
                           <TooltipContent side="top" className="max-w-[200px]">
@@ -461,71 +459,70 @@ export default function Dashboard() {
                       const isToday = index === currentDayIndex;
                       const shouldHighlight = isToday && mealType.value === highlightedMealType;
 
-                      return (
-                        <Card
-                          key={weekDay.day}
-                          className={`overflow-hidden relative ${
-                            shouldHighlight ? 'ring-2 ring-green-500 ring-offset-2' : ''
-                          } ${menu ? '' : 'bg-muted/50'}`}
-                        >
-                          {menu?.image ? (
-                            <>
-                              {/* Background Image */}
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img
-                                src={menu.image}
-                                alt={menu.name}
-                                className="absolute inset-0 w-full h-full object-cover"
-                              />
-                              {/* Gradient Overlay */}
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
-                              {/* Content */}
-                              <div className="relative z-10 p-3">
-                                <div className="flex items-center justify-between">
-                                  <span className="font-semibold text-white text-sm drop-shadow-md">
-                                    {weekDay.fullLabel}
-                                  </span>
-                                  {isToday && (
-                                    <Badge className="bg-green-500 text-white text-xs border-0">
-                                      Hoy
-                                    </Badge>
-                                  )}
+                      return menu ? (
+                        <Link key={weekDay.day} href={`/menus/${menu.id}`}>
+                          <Card
+                            className={`overflow-hidden relative cursor-pointer transition-all hover:shadow-md ${
+                              shouldHighlight ? 'ring-2 ring-green-500 ring-offset-2' : ''
+                            }`}
+                          >
+                            {menu.image ? (
+                              <>
+                                {/* Background Image */}
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src={menu.image}
+                                  alt={menu.name}
+                                  className="absolute inset-0 w-full h-full object-cover"
+                                />
+                                {/* Gradient Overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+                                {/* Content */}
+                                <div className="relative z-10 p-3">
+                                  <div className="flex items-center justify-between">
+                                    <span className="font-semibold text-white text-sm drop-shadow-md">
+                                      {weekDay.fullLabel}
+                                    </span>
+                                    {isToday && (
+                                      <Badge className="bg-green-500 text-white text-xs border-0">
+                                        Hoy
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  <div>
+                                    <span className="text-xs text-white/80 drop-shadow-md">
+                                      {weekDay.date.toLocaleDateString('es-ES', {
+                                        day: 'numeric',
+                                        month: 'short',
+                                      })}
+                                    </span>
+                                    <p className="font-medium text-sm text-white line-clamp-2 drop-shadow-md mt-1">
+                                      {menu.name}
+                                    </p>
+                                  </div>
                                 </div>
-                                <div>
-                                  <span className="text-xs text-white/80 drop-shadow-md">
+                              </>
+                            ) : (
+                              <>
+                                <CardHeader className="pb-0.5 pt-2 px-3">
+                                  <div className="flex items-center justify-between">
+                                    <span className="font-semibold text-foreground text-sm">
+                                      {weekDay.fullLabel}
+                                    </span>
+                                    {isToday && (
+                                      <Badge variant="secondary" className="text-xs">
+                                        Hoy
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  <span className="text-xs text-muted-foreground leading-none">
                                     {weekDay.date.toLocaleDateString('es-ES', {
                                       day: 'numeric',
                                       month: 'short',
                                     })}
                                   </span>
-                                  <p className="font-medium text-sm text-white line-clamp-2 drop-shadow-md mt-1">
-                                    {menu.name}
-                                  </p>
-                                </div>
-                              </div>
-                            </>
-                          ) : (
-                            <>
-                              <CardHeader className="pb-0.5 pt-2 px-3">
-                                <div className="flex items-center justify-between">
-                                  <span className="font-semibold text-foreground text-sm">
-                                    {weekDay.fullLabel}
-                                  </span>
-                                  {isToday && (
-                                    <Badge variant="secondary" className="text-xs">
-                                      Hoy
-                                    </Badge>
-                                  )}
-                                </div>
-                                <span className="text-xs text-muted-foreground leading-none">
-                                  {weekDay.date.toLocaleDateString('es-ES', {
-                                    day: 'numeric',
-                                    month: 'short',
-                                  })}
-                                </span>
-                              </CardHeader>
-                              <CardContent className="pt-0 pb-2 px-3">
-                                {menu ? (
+                                </CardHeader>
+                                <CardContent className="pt-0 pb-2 px-3">
                                   <div className="flex items-center gap-2">
                                     <div className="w-8 h-8 bg-muted rounded flex items-center justify-center flex-shrink-0">
                                       <ChefHat className="w-4 h-4 text-muted-foreground" />
@@ -534,14 +531,41 @@ export default function Dashboard() {
                                       {menu.name}
                                     </p>
                                   </div>
-                                ) : (
-                                  <div className="text-center py-1 text-muted-foreground">
-                                    <ChefHat className="w-5 h-5 mx-auto opacity-50" />
-                                  </div>
-                                )}
-                              </CardContent>
-                            </>
-                          )}
+                                </CardContent>
+                              </>
+                            )}
+                          </Card>
+                        </Link>
+                      ) : (
+                        <Card
+                          key={weekDay.day}
+                          className={`overflow-hidden relative ${
+                            shouldHighlight ? 'ring-2 ring-green-500 ring-offset-2' : ''
+                          } bg-muted/50`}
+                        >
+                          <CardHeader className="pb-0.5 pt-2 px-3">
+                            <div className="flex items-center justify-between">
+                              <span className="font-semibold text-foreground text-sm">
+                                {weekDay.fullLabel}
+                              </span>
+                              {isToday && (
+                                <Badge variant="secondary" className="text-xs">
+                                  Hoy
+                                </Badge>
+                              )}
+                            </div>
+                            <span className="text-xs text-muted-foreground leading-none">
+                              {weekDay.date.toLocaleDateString('es-ES', {
+                                day: 'numeric',
+                                month: 'short',
+                              })}
+                            </span>
+                          </CardHeader>
+                          <CardContent className="pt-0 pb-2 px-3">
+                            <div className="text-center py-1 text-muted-foreground">
+                              <ChefHat className="w-5 h-5 mx-auto opacity-50" />
+                            </div>
+                          </CardContent>
                         </Card>
                       );
                     })}

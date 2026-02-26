@@ -118,11 +118,7 @@ export default function AsignarPage() {
     try {
       const weekStart = getCurrentWeekStart();
 
-      const result = await emailService.sendWeeklyMenu(
-        data.config.emails,
-        weekStart,
-        shoppingList
-      );
+      const result = await emailService.sendWeeklyMenu(data.config.emails, weekStart, shoppingList);
 
       if (result.success) {
         toast.success('Email enviado correctamente');
