@@ -164,20 +164,15 @@ export default function MenusPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-sm text-gray-600">Total Menús</p>
-            <p className="text-2xl font-bold">{menus.length}</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-sm text-gray-600">Con Imagen</p>
-            <p className="text-2xl font-bold">{menus.filter(m => m.image).length}</p>
-          </CardContent>
-        </Card>
+      <div className="flex flex-wrap gap-2 mb-6">
+        <Badge variant="secondary" className="px-3 py-1.5 text-sm font-normal">
+          <span className="font-semibold mr-1">{menus.length}</span>
+          menús
+        </Badge>
+        <Badge variant="outline" className="px-3 py-1.5 text-sm font-normal">
+          <span className="font-semibold mr-1">{menus.filter(m => m.image).length}</span>
+          con imagen
+        </Badge>
       </div>
 
       {/* Menu Grid */}

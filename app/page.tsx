@@ -340,7 +340,7 @@ export default function Dashboard() {
                       <Tooltip key={`${mealType.value}-${weekDay.day}`}>
                         <TooltipTrigger asChild>
                           <Card
-                            className={`cursor-pointer transition-all hover:shadow-md overflow-hidden relative ${
+                            className={`cursor-pointer transition-all hover:shadow-md overflow-hidden relative p-2 gap-2 ${
                               shouldHighlight ? 'ring-2 ring-green-500 ring-offset-1' : ''
                             } ${menu ? '' : 'bg-gray-50'}`}
                           >
@@ -401,7 +401,7 @@ export default function Dashboard() {
                                   </span>
                                 </CardHeader>
                                 <CardContent className="pt-0 pb-1 px-2">
-                                  {menu ? (
+                                  {menu && (
                                     <div className="flex items-center gap-1">
                                       <div className="w-6 h-6 bg-gray-200 rounded flex items-center justify-center flex-shrink-0">
                                         <ChefHat className="w-3 h-3 text-gray-400" />
@@ -409,10 +409,6 @@ export default function Dashboard() {
                                       <p className="font-medium text-[10px] text-gray-900 line-clamp-1 leading-none">
                                         {menu.name}
                                       </p>
-                                    </div>
-                                  ) : (
-                                    <div className="text-center py-1 text-gray-400">
-                                      <ChefHat className="w-3 h-3 mx-auto opacity-50" />
                                     </div>
                                   )}
                                 </CardContent>
