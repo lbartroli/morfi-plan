@@ -356,7 +356,7 @@ export default function Dashboard() {
                                 {/* Gradient Overlay */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
                                 {/* Content */}
-                                <div className="relative z-10 p-2 h-full flex flex-col justify-between min-h-[70px]">
+                                <div className="relative z-10 p-2">
                                   <div className="flex items-center justify-between">
                                     <span className="font-semibold text-white text-xs drop-shadow-md">
                                       {weekDay.label}
@@ -382,7 +382,7 @@ export default function Dashboard() {
                               </>
                             ) : (
                               <>
-                                <CardHeader className="pb-1 pt-2 px-2">
+                                <CardHeader className="pb-1 pt-1.5 px-2">
                                   <div className="flex items-center justify-between">
                                     <span className="font-semibold text-gray-900 text-xs">
                                       {weekDay.label}
@@ -400,7 +400,7 @@ export default function Dashboard() {
                                     })}
                                   </span>
                                 </CardHeader>
-                                <CardContent className="pt-0 pb-2 px-2">
+                                <CardContent className="pt-0 pb-1.5 px-2">
                                   {menu ? (
                                     <div className="space-y-1">
                                       <div className="w-full h-10 bg-gray-200 rounded flex items-center justify-center">
@@ -482,7 +482,7 @@ export default function Dashboard() {
                               {/* Gradient Overlay */}
                               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
                               {/* Content */}
-                              <div className="relative z-10 p-3 h-full flex flex-col justify-between min-h-[120px]">
+                              <div className="relative z-10 p-3">
                                 <div className="flex items-center justify-between">
                                   <span className="font-semibold text-white text-sm drop-shadow-md">
                                     {weekDay.fullLabel}
@@ -508,7 +508,7 @@ export default function Dashboard() {
                             </>
                           ) : (
                             <>
-                              <CardHeader className="pb-2 pt-3 px-3">
+                              <CardHeader className="pb-1 pt-2 px-3">
                                 <div className="flex items-center justify-between">
                                   <span className="font-semibold text-gray-900 text-sm">
                                     {weekDay.fullLabel}
@@ -526,19 +526,19 @@ export default function Dashboard() {
                                   })}
                                 </span>
                               </CardHeader>
-                              <CardContent className="pt-0">
+                              <CardContent className="pt-0 pb-2 px-3">
                                 {menu ? (
-                                  <div className="space-y-2">
-                                    <div className="w-full h-20 bg-gray-200 rounded-md flex items-center justify-center">
-                                      <ChefHat className="w-8 h-8 text-gray-400" />
+                                  <div className="space-y-1.5">
+                                    <div className="w-full h-12 bg-gray-200 rounded-md flex items-center justify-center">
+                                      <ChefHat className="w-6 h-6 text-gray-400" />
                                     </div>
                                     <p className="font-medium text-sm text-gray-900 line-clamp-2">
                                       {menu.name}
                                     </p>
                                   </div>
                                 ) : (
-                                  <div className="text-center py-4 text-gray-400">
-                                    <ChefHat className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                                  <div className="text-center py-2 text-gray-400">
+                                    <ChefHat className="w-6 h-6 mx-auto mb-1 opacity-50" />
                                     <p className="text-sm">Sin asignar</p>
                                   </div>
                                 )}
