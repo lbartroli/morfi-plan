@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Home, BookOpen, Calendar, Menu, X } from 'lucide-react';
+import { Home, BookOpen, Calendar, Menu } from 'lucide-react';
 
 const navItems = [
   { href: '/', label: 'Inicio', icon: Home },

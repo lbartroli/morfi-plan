@@ -10,9 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Separator } from '@/components/ui/separator';
 import {
   CalendarDays,
   ChefHat,
@@ -27,14 +25,12 @@ import { jsonBinClient } from '@/lib/jsonbin';
 import { emailService } from '@/lib/email';
 import {
   AppData,
-  Menu,
   Assignment,
   DAYS_OF_WEEK,
   MEAL_TYPES,
   DayOfWeek,
   MealType,
   getCurrentWeekStart,
-  getWeekDays,
 } from '@/lib/types';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
@@ -49,20 +45,19 @@ export default function AsignarPage() {
   const [shoppingList, setShoppingList] = useState<string[]>([]);
 
   useEffect(() => {
+    const loadData = async () => {
+      try {
+        const appData = await jsonBinClient.getData();
+        setData(appData);
+        updateShoppingList(appData);
+      } catch (_error) {
+        toast.error('Error al cargar los datos');
+      } finally {
+        setLoading(false);
+      }
+    };
     loadData();
   }, []);
-
-  const loadData = async () => {
-    try {
-      const appData = await jsonBinClient.getData();
-      setData(appData);
-      updateShoppingList(appData);
-    } catch (error) {
-      toast.error('Error al cargar los datos');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const updateShoppingList = (appData: AppData) => {
     const list = jsonBinClient.getShoppingList(appData.menus, appData.assignments);
@@ -93,7 +88,7 @@ export default function AsignarPage() {
       setSelectedMenu('');
       setSelectedDay('');
       setSelectedMeal('');
-    } catch (error) {
+    } catch (_error) {
       toast.error('Error al asignar el menú');
     }
   };
@@ -107,7 +102,7 @@ export default function AsignarPage() {
       setData(newData);
       updateShoppingList(newData);
       toast.success('Asignación eliminada');
-    } catch (error) {
+    } catch (_error) {
       toast.error('Error al eliminar la asignación');
     }
   };
@@ -147,7 +142,7 @@ export default function AsignarPage() {
       } else {
         toast.error(`Error al enviar email: ${result.error}`);
       }
-    } catch (error) {
+    } catch (_error) {
       toast.error('Error al enviar el email');
     } finally {
       setSendingEmail(false);
@@ -165,9 +160,6 @@ export default function AsignarPage() {
     if (!data) return null;
     return data.menus.find(m => m.id === menuId);
   };
-
-  const weekStart = getCurrentWeekStart();
-  const weekDays = getWeekDays(weekStart);
 
   if (loading) {
     return (
@@ -311,6 +303,7 @@ export default function AsignarPage() {
                               {menu ? (
                                 <div className="flex items-center gap-2">
                                   {menu.image ? (
+                                    // eslint-disable-next-line @next/next/no-img-element
                                     <img
                                       src={menu.image}
                                       alt={menu.name}

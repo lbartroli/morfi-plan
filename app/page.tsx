@@ -354,7 +354,7 @@ export default function Dashboard() {
                                   className="absolute inset-0 w-full h-full object-cover"
                                 />
                                 {/* Gradient Overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+                                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-black/20" />
                                 {/* Content */}
                                 <div className="relative z-10 p-2">
                                   <div className="flex items-center justify-between">

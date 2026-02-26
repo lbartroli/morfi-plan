@@ -6,15 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import {
   Plus,
   Pencil,
@@ -52,7 +45,7 @@ export default function MenusPage() {
     try {
       const data = await jsonBinClient.getData();
       setMenus(data.menus);
-    } catch (error) {
+    } catch (_error) {
       toast.error('Error al cargar los menús');
     } finally {
       setLoading(false);
@@ -93,7 +86,7 @@ export default function MenusPage() {
       await loadMenus();
       resetForm();
       setIsDialogOpen(false);
-    } catch (error) {
+    } catch (_error) {
       toast.error('Error al guardar el menú');
     }
   };
@@ -105,7 +98,7 @@ export default function MenusPage() {
       await jsonBinClient.deleteMenu(menuId);
       toast.success('Menú eliminado correctamente');
       await loadMenus();
-    } catch (error) {
+    } catch (_error) {
       toast.error('Error al eliminar el menú');
     }
   };
@@ -214,6 +207,7 @@ export default function MenusPage() {
             <Card key={menu.id} className="overflow-hidden">
               <div className="relative">
                 {menu.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img src={menu.image} alt={menu.name} className="w-full h-48 object-cover" />
                 ) : (
                   <div className="w-full h-48 bg-gray-100 flex items-center justify-center">
@@ -308,6 +302,7 @@ export default function MenusPage() {
 
             {formData.image && (
               <div className="relative">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={formData.image}
                   alt="Preview"

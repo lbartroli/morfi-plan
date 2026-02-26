@@ -3,7 +3,7 @@ import { emailService } from '@/lib/email';
 import { jsonBinClient } from '@/lib/jsonbin';
 import { DAYS_OF_WEEK, MEAL_TYPES } from '@/lib/types';
 
-export async function POST(request: Request) {
+export async function POST(_request: Request) {
   try {
     // Obtener datos de la aplicación
     const data = await jsonBinClient.getData();
