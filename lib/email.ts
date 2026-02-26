@@ -45,7 +45,7 @@ export class EmailService {
 
     try {
       const { error } = await this.resend.emails.send({
-        from: 'Morfi-Plan <morfi-plan@resend.dev>',
+        from: 'Morfi-Plan <morfi-plan@lucasbartroli.dev>',
         to: to,
         subject: `🛒 Lista de Compras para esta semana`,
         html,

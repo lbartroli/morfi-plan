@@ -27,6 +27,26 @@ const HOUR_OPTIONS = Array.from({ length: 24 }, (_, i) => ({
   label: `${i.toString().padStart(2, '0')}:00`,
 }));
 
+// Convert UTC hour to local hour for display
+const utcToLocal = (utcHour: number): number => {
+  const date = new Date();
+  date.setUTCHours(utcHour, 0, 0, 0);
+  return date.getHours();
+};
+
+// Convert local hour to UTC for storage
+const localToUtc = (localHour: number): number => {
+  const date = new Date();
+  date.setHours(localHour, 0, 0, 0);
+  return date.getUTCHours();
+};
+
+// Auto-migration: assume old configs are in Argentina time (UTC-3)
+const migrateFromArgentinaTime = (storedHour: number): number => {
+  // Argentina is UTC-3, so add 3 hours to get UTC
+  return (storedHour + 3) % 24;
+};
+
 export default function ConfigPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -34,7 +54,7 @@ export default function ConfigPage() {
   const [config, setConfig] = useState<AppData['config']>({
     emails: [''],
     sendDay: 'sunday',
-    sendHour: 9,
+    sendHour: 12, // Default: 9 AM Argentina = 12 UTC
   });
   const [newEmail, setNewEmail] = useState('');
 
@@ -45,10 +65,31 @@ export default function ConfigPage() {
   const loadConfig = async () => {
     try {
       const data = await jsonBinClient.getConfig();
+
+      // Auto-migration: check if config needs UTC conversion
+      // Old configs were stored in local Argentina time (default 9)
+      // New configs are stored in UTC (default 12)
+      let migratedHour = data.sendHour ?? 12;
+      const isMigrated = (data as unknown as { _utcMigrated?: boolean })._utcMigrated;
+
+      if (!isMigrated && migratedHour < 12) {
+        // Likely old format (Argentina local time), migrate to UTC
+        migratedHour = migrateFromArgentinaTime(migratedHour);
+        // Silently update the config with UTC time and migration flag
+        await jsonBinClient.updateConfig({
+          ...data,
+          sendHour: migratedHour,
+          _utcMigrated: true,
+        } as unknown as AppData['config']);
+      }
+
+      // Convert UTC to local for display
+      const displayHour = utcToLocal(migratedHour);
+
       setConfig({
         emails: data.emails || [''],
         sendDay: data.sendDay || 'sunday',
-        sendHour: data.sendHour ?? 9,
+        sendHour: displayHour, // Store local hour in state for UI
       });
     } catch (_error) {
       toast.error('Error al cargar la configuración');
@@ -76,9 +117,18 @@ export default function ConfigPage() {
 
     setSaving(true);
     try {
-      const configToSave = { ...config, emails: validEmails };
+      // Convert local hour to UTC for storage
+      const utcHour = localToUtc(config.sendHour);
+
+      const configToSave = {
+        ...config,
+        emails: validEmails,
+        sendHour: utcHour,
+        _utcMigrated: true,
+      } as unknown as AppData['config'];
+
       await jsonBinClient.updateConfig(configToSave);
-      setConfig(configToSave);
+      setConfig(config);
       toast.success('Configuración guardada correctamente');
     } catch (_error) {
       toast.error('Error al guardar la configuración');

@@ -1,0 +1,36 @@
+name: Send Weekly Email
+
+on:
+  schedule:
+    # Run every hour to check if it's time to send
+    - cron: '0 * * * *'
+  workflow_dispatch:
+    inputs:
+      trigger_type:
+        description: 'Trigger type'
+        required: true
+        default: 'manual'
+        type: choice
+        options:
+          - manual
+          - scheduled
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send weekly menu email
+        run: |
+          TRIGGER_TYPE="${{ github.event.inputs.trigger_type || 'scheduled' }}"
+
+          echo "Trigger type: $TRIGGER_TYPE"
+
+          curl -X POST "${{ vars.APP_URL }}/api/send-email" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"trigger\": \"$TRIGGER_TYPE\"}" \
+            --fail-with-body \
+            -w "\nHTTP Status: %{http_code}\n" \
+            -s
+        env:
+          APP_URL: ${{ vars.APP_URL || 'https://morfi-plan.vercel.app' }}

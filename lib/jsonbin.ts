@@ -22,12 +22,6 @@ export class JsonBinClient {
   constructor() {
     this.apiKey = JSONBIN_API_KEY;
     this.binId = JSONBIN_BIN_ID;
-    console.log('JSONBin Client initialized:', {
-      hasApiKey: !!this.apiKey,
-      apiKeyLength: this.apiKey?.length,
-      hasBinId: !!this.binId,
-      binId: this.binId,
-    });
   }
 
   private async request(method: string, body?: unknown): Promise<AppData> {
@@ -55,7 +49,7 @@ export class JsonBinClient {
         options.body = JSON.stringify(body);
       }
 
-        const response = await fetch(url, options);
+      const response = await fetch(url, options);
 
       if (!response.ok) {
         const errorText = await response.text();
