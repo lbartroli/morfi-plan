@@ -29,7 +29,7 @@ export class EmailService {
     // Formatear el menú semanal
     const menuHtml = menuNames
       .map(
-        (item) => `
+        item => `
           <tr>
             <td style="padding: 10px; border: 1px solid #e5e7eb;">${item.day}</td>
             <td style="padding: 10px; border: 1px solid #e5e7eb;">${item.mealType}</td>

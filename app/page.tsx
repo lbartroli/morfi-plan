@@ -1,58 +1,48 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { 
-  CalendarDays, 
-  Clock, 
-  ChefHat, 
+  CalendarDays,
+  Clock,
+  ChefHat,
   ArrowRight,
   Loader2,
   UtensilsCrossed,
   BookOpen,
   Plus,
   ChevronDown,
-  List
-} from "lucide-react";
-import { 
-  jsonBinClient 
-} from "@/lib/jsonbin";
-import { 
-  AppData, 
-  Menu, 
-  Assignment, 
-  getCurrentWeekStart, 
+  List,
+} from 'lucide-react';
+import { jsonBinClient } from '@/lib/jsonbin';
+import {
+  AppData,
+  Menu,
+  Assignment,
+  getCurrentWeekStart,
   getWeekDays,
   DAYS_OF_WEEK,
   MEAL_TYPES,
   DayOfWeek,
-  MealType
-} from "@/lib/types";
-import { toast } from "sonner";
+  MealType,
+} from '@/lib/types';
+import { toast } from 'sonner';
 
 // Función para obtener la comida del día según la hora
 const getCurrentDayMeal = (
   assignments: Assignment[],
   menus: Menu[],
   currentDate: Date = new Date()
-): { menu: Menu | null; day: DayOfWeek; mealType: MealType; label: string } | null =>> {
+): { menu: Menu | null; day: DayOfWeek; mealType: MealType; label: string } | null => {
   const currentHour = currentDate.getHours();
   const currentDay = currentDate.getDay();
-  
+
   // Mapear día de la semana
   const dayMap: { [key: number]: DayOfWeek } = {
     1: 'lunes',
@@ -61,21 +51,21 @@ const getCurrentDayMeal = (
     4: 'jueves',
     5: 'viernes',
   };
-  
+
   const today = dayMap[currentDay];
   if (!today) return null; // Fin de semana
-  
+
   // Entre 00:00 y 12:00 → almuerzo
   // Entre 12:00 y 23:59 → cena
   const mealType: MealType = currentHour < 12 ? 'almuerzo' : 'cena';
   const label = currentHour < 12 ? 'Almuerzo de hoy' : 'Cena de hoy';
-  
+
   const assignment = assignments.find(
     a => a.day === today && a.mealType === mealType && a.weekOffset === 0
   );
-  
+
   const menu = assignment ? menus.find(m => m.id === assignment.menuId) : null;
-  
+
   return { menu: menu || null, day: today, mealType, label };
 };
 
@@ -101,7 +91,7 @@ export default function Dashboard() {
       setData(appData);
       setCurrentMeal(getCurrentDayMeal(appData.assignments, appData.menus));
     } catch (error) {
-      toast.error("Error al cargar los datos");
+      toast.error('Error al cargar los datos');
     } finally {
       setLoading(false);
     }
@@ -141,12 +131,8 @@ export default function Dashboard() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       {/* Header */}
       <div className="mb-4">
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">
-          ¡Hola! 👋
-        </h1>
-        <p className="text-sm text-gray-600">
-          Aquí está tu planificación para esta semana
-        </p>
+        <h1 className="text-2xl font-bold text-gray-900 mb-1">¡Hola! 👋</h1>
+        <p className="text-sm text-gray-600">Aquí está tu planificación para esta semana</p>
       </div>
 
       {/* Acciones Rápidas - Compactas */}
@@ -160,7 +146,7 @@ export default function Dashboard() {
             </Badge>
           </Button>
         </Link>
-        
+
         <Link href="/asignar">
           <Button variant="default" size="sm" className="gap-1 h-8 bg-green-600 hover:bg-green-700">
             <CalendarDays className="w-3.5 h-3.5" />
@@ -180,7 +166,7 @@ export default function Dashboard() {
         <CardContent className="pt-0">
           {/* Vista Desktop: Sin tabs, ambas filas visibles */}
           <div className="hidden md:block space-y-3">
-            {MEAL_TYPES.map((mealType) => (
+            {MEAL_TYPES.map(mealType => (
               <div key={mealType.value}>
                 <h3 className="text-xs font-medium text-gray-500 mb-2 flex items-center gap-1.5">
                   <span>{mealType.icon}</span> <span>{mealType.label}</span>
@@ -198,12 +184,8 @@ export default function Dashboard() {
                         <TooltipTrigger asChild>
                           <Card
                             className={`cursor-pointer transition-all hover:shadow-md ${
-                              shouldHighlight
-                                ? "ring-2 ring-green-500 ring-offset-1" 
-                                : ""
-                            } ${
-                              menu ? "" : "bg-gray-50"
-                            }`}
+                              shouldHighlight ? 'ring-2 ring-green-500 ring-offset-1' : ''
+                            } ${menu ? '' : 'bg-gray-50'}`}
                           >
                             <CardHeader className="pb-1 pt-2 px-2">
                               <div className="flex items-center justify-between">
@@ -217,9 +199,9 @@ export default function Dashboard() {
                                 )}
                               </div>
                               <span className="text-[10px] text-gray-500">
-                                {weekDay.date.toLocaleDateString("es-ES", {
-                                  day: "numeric",
-                                  month: "short",
+                                {weekDay.date.toLocaleDateString('es-ES', {
+                                  day: 'numeric',
+                                  month: 'short',
                                 })}
                               </span>
                             </CardHeader>
@@ -253,9 +235,13 @@ export default function Dashboard() {
                         {menu && (
                           <TooltipContent side="top" className="max-w-[200px]">
                             <p className="font-semibold text-xs mb-1">{menu.name}</p>
-                            <p className="text-xs text-gray-500">{menu.ingredients.slice(0, 5).join(", ")}</p>
+                            <p className="text-xs text-gray-500">
+                              {menu.ingredients.slice(0, 5).join(', ')}
+                            </p>
                             {menu.ingredients.length > 5 && (
-                              <p className="text-xs text-gray-400">y {menu.ingredients.length - 5} más...</p>
+                              <p className="text-xs text-gray-400">
+                                y {menu.ingredients.length - 5} más...
+                              </p>
                             )}
                           </TooltipContent>
                         )}
@@ -279,7 +265,7 @@ export default function Dashboard() {
                 </TabsTrigger>
               </TabsList>
 
-              {MEAL_TYPES.map((mealType) => (
+              {MEAL_TYPES.map(mealType => (
                 <TabsContent key={mealType.value} value={mealType.value}>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                     {weekDays.map((weekDay, index) => {
@@ -292,12 +278,8 @@ export default function Dashboard() {
                         <Card
                           key={weekDay.day}
                           className={`${
-                            shouldHighlight
-                              ? "ring-2 ring-green-500 ring-offset-2" 
-                              : ""
-                          } ${
-                            menu ? "" : "bg-gray-50"
-                          }`}
+                            shouldHighlight ? 'ring-2 ring-green-500 ring-offset-2' : ''
+                          } ${menu ? '' : 'bg-gray-50'}`}
                         >
                           <CardHeader className="pb-2 pt-3 px-3">
                             <div className="flex items-center justify-between">
@@ -305,15 +287,13 @@ export default function Dashboard() {
                                 {weekDay.fullLabel}
                               </span>
                               {isToday && (
-                                <Badge className="bg-green-100 text-green-800 text-xs">
-                                  Hoy
-                                </Badge>
+                                <Badge className="bg-green-100 text-green-800 text-xs">Hoy</Badge>
                               )}
                             </div>
                             <span className="text-xs text-gray-500">
-                              {weekDay.date.toLocaleDateString("es-ES", {
-                                day: "numeric",
-                                month: "short",
+                              {weekDay.date.toLocaleDateString('es-ES', {
+                                day: 'numeric',
+                                month: 'short',
                               })}
                             </span>
                           </CardHeader>
@@ -359,9 +339,7 @@ export default function Dashboard() {
           <CardHeader className="pb-3 pt-4">
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-green-600" />
-              <CardTitle className="text-base text-green-800">
-                {currentMeal.label}
-              </CardTitle>
+              <CardTitle className="text-base text-green-800">{currentMeal.label}</CardTitle>
             </div>
           </CardHeader>
           <CardContent className="pt-0">
@@ -393,29 +371,31 @@ export default function Dashboard() {
                     </h3>
                   </div>
                 </div>
-                
+
                 {/* Ingredientes expandibles */}
                 <Collapsible open={ingredientsOpen} onOpenChange={setIngredientsOpen}>
                   <CollapsibleTrigger asChild>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+                    <Button
+                      variant="outline"
+                      size="sm"
                       className="w-full justify-between h-8 text-xs bg-white hover:bg-gray-50"
                     >
                       <span className="flex items-center gap-2">
                         <List className="w-3.5 h-3.5" />
                         Ver ingredientes ({currentMeal.menu.ingredients.length})
                       </span>
-                      <ChevronDown className={`w-4 h-4 transition-transform ${ingredientsOpen ? 'rotate-180' : ''}`} />
+                      <ChevronDown
+                        className={`w-4 h-4 transition-transform ${ingredientsOpen ? 'rotate-180' : ''}`}
+                      />
                     </Button>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
                     <div className="mt-3 p-3 bg-white rounded-lg border border-green-200">
                       <div className="flex flex-wrap gap-1.5">
                         {currentMeal.menu.ingredients.map((ingredient, idx) => (
-                          <Badge 
-                            key={idx} 
-                            variant="secondary" 
+                          <Badge
+                            key={idx}
+                            variant="secondary"
                             className="text-xs font-normal capitalize"
                           >
                             {ingredient}
@@ -436,7 +416,8 @@ export default function Dashboard() {
                     Sin menú asignado
                   </h3>
                   <p className="text-xs text-gray-600 mb-2">
-                    No hay {currentMeal.mealType === 'almuerzo' ? 'almuerzo' : 'cena'} asignado para hoy
+                    No hay {currentMeal.mealType === 'almuerzo' ? 'almuerzo' : 'cena'} asignado para
+                    hoy
                   </p>
                   <Link href="/asignar">
                     <Button size="sm" className="h-7 text-xs bg-green-600 hover:bg-green-700">

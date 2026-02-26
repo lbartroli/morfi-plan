@@ -1,48 +1,50 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Separator } from "@/components/ui/separator";
-import { 
-  CalendarDays, 
-  ChefHat, 
-  Plus, 
-  X, 
+import { useEffect, useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Separator } from '@/components/ui/separator';
+import {
+  CalendarDays,
+  ChefHat,
+  Plus,
+  X,
   Send,
   Loader2,
   ShoppingCart,
-  CheckCircle2
-} from "lucide-react";
-import { 
-  jsonBinClient 
-} from "@/lib/jsonbin";
-import { 
-  emailService 
-} from "@/lib/email";
-import { 
-  AppData, 
-  Menu, 
-  Assignment, 
-  DAYS_OF_WEEK, 
+  CheckCircle2,
+} from 'lucide-react';
+import { jsonBinClient } from '@/lib/jsonbin';
+import { emailService } from '@/lib/email';
+import {
+  AppData,
+  Menu,
+  Assignment,
+  DAYS_OF_WEEK,
   MEAL_TYPES,
   DayOfWeek,
   MealType,
   getCurrentWeekStart,
-  getWeekDays
-} from "@/lib/types";
-import { toast } from "sonner";
-import { v4 as uuidv4 } from "uuid";
+  getWeekDays,
+} from '@/lib/types';
+import { toast } from 'sonner';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function AsignarPage() {
   const [data, setData] = useState<AppData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedDay, setSelectedDay] = useState<DayOfWeek | "">("");
-  const [selectedMeal, setSelectedMeal] = useState<MealType | "">("");
-  const [selectedMenu, setSelectedMenu] = useState<string>("");
+  const [selectedDay, setSelectedDay] = useState<DayOfWeek | ''>('');
+  const [selectedMeal, setSelectedMeal] = useState<MealType | ''>('');
+  const [selectedMenu, setSelectedMenu] = useState<string>('');
   const [sendingEmail, setSendingEmail] = useState(false);
   const [shoppingList, setShoppingList] = useState<string[]>([]);
 
@@ -56,7 +58,7 @@ export default function AsignarPage() {
       setData(appData);
       updateShoppingList(appData);
     } catch (error) {
-      toast.error("Error al cargar los datos");
+      toast.error('Error al cargar los datos');
     } finally {
       setLoading(false);
     }
@@ -84,15 +86,15 @@ export default function AsignarPage() {
       const newData = { ...data, assignments: updatedAssignments };
       setData(newData);
       updateShoppingList(newData);
-      
-      toast.success("Menú asignado correctamente");
-      
+
+      toast.success('Menú asignado correctamente');
+
       // Reset selections
-      setSelectedMenu("");
-      setSelectedDay("");
-      setSelectedMeal("");
+      setSelectedMenu('');
+      setSelectedDay('');
+      setSelectedMeal('');
     } catch (error) {
-      toast.error("Error al asignar el menú");
+      toast.error('Error al asignar el menú');
     }
   };
 
@@ -104,15 +106,15 @@ export default function AsignarPage() {
       const newData = { ...data, assignments: updatedAssignments };
       setData(newData);
       updateShoppingList(newData);
-      toast.success("Asignación eliminada");
+      toast.success('Asignación eliminada');
     } catch (error) {
-      toast.error("Error al eliminar la asignación");
+      toast.error('Error al eliminar la asignación');
     }
   };
 
   const handleSendEmail = async () => {
     if (!data || !emailService.isConfigured()) {
-      toast.error("El servicio de email no está configurado");
+      toast.error('El servicio de email no está configurado');
       return;
     }
 
@@ -120,7 +122,7 @@ export default function AsignarPage() {
 
     try {
       const weekStart = getCurrentWeekStart();
-      
+
       // Preparar datos del menú
       const menuNames = data.assignments
         .filter(a => a.weekOffset === 0)
@@ -129,7 +131,7 @@ export default function AsignarPage() {
           return {
             day: DAYS_OF_WEEK.find(d => d.value === a.day)?.fullLabel || a.day,
             mealType: MEAL_TYPES.find(m => m.value === a.mealType)?.label || a.mealType,
-            menuName: menu?.name || "Menú desconocido",
+            menuName: menu?.name || 'Menú desconocido',
           };
         });
 
@@ -141,12 +143,12 @@ export default function AsignarPage() {
       );
 
       if (result.success) {
-        toast.success("Email enviado correctamente");
+        toast.success('Email enviado correctamente');
       } else {
         toast.error(`Error al enviar email: ${result.error}`);
       }
     } catch (error) {
-      toast.error("Error al enviar el email");
+      toast.error('Error al enviar el email');
     } finally {
       setSendingEmail(false);
     }
@@ -180,14 +182,10 @@ export default function AsignarPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            Asignar Menús
-          </h1>
-          <p className="text-gray-600 mt-1">
-            Planifica tu semana asignando menús a cada día
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900">Asignar Menús</h1>
+          <p className="text-gray-600 mt-1">Planifica tu semana asignando menús a cada día</p>
         </div>
-        
+
         <Button
           onClick={handleSendEmail}
           disabled={sendingEmail || shoppingList.length === 0}
@@ -222,12 +220,12 @@ export default function AsignarPage() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Día</label>
-                  <Select value={selectedDay} onValueChange={(v) => setSelectedDay(v as DayOfWeek)}>
+                  <Select value={selectedDay} onValueChange={v => setSelectedDay(v as DayOfWeek)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Seleccionar día" />
                     </SelectTrigger>
                     <SelectContent>
-                      {DAYS_OF_WEEK.map((day) => (
+                      {DAYS_OF_WEEK.map(day => (
                         <SelectItem key={day.value} value={day.value}>
                           {day.fullLabel}
                         </SelectItem>
@@ -238,12 +236,12 @@ export default function AsignarPage() {
 
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Comida</label>
-                  <Select value={selectedMeal} onValueChange={(v) => setSelectedMeal(v as MealType)}>
+                  <Select value={selectedMeal} onValueChange={v => setSelectedMeal(v as MealType)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Seleccionar comida" />
                     </SelectTrigger>
                     <SelectContent>
-                      {MEAL_TYPES.map((meal) => (
+                      {MEAL_TYPES.map(meal => (
                         <SelectItem key={meal.value} value={meal.value}>
                           {meal.icon} {meal.label}
                         </SelectItem>
@@ -259,7 +257,7 @@ export default function AsignarPage() {
                       <SelectValue placeholder="Seleccionar menú" />
                     </SelectTrigger>
                     <SelectContent>
-                      {data?.menus.map((menu) => (
+                      {data?.menus.map(menu => (
                         <SelectItem key={menu.id} value={menu.id}>
                           {menu.name}
                         </SelectItem>
@@ -291,18 +289,14 @@ export default function AsignarPage() {
             <CardContent>
               <Tabs defaultValue="almuerzo" className="w-full">
                 <TabsList className="grid w-full grid-cols-2 mb-6">
-                  <TabsTrigger value="almuerzo">
-                    ☀️ Almuerzos
-                  </TabsTrigger>
-                  <TabsTrigger value="cena">
-                    🌙 Cenas
-                  </TabsTrigger>
+                  <TabsTrigger value="almuerzo">☀️ Almuerzos</TabsTrigger>
+                  <TabsTrigger value="cena">🌙 Cenas</TabsTrigger>
                 </TabsList>
 
-                {MEAL_TYPES.map((mealType) => (
+                {MEAL_TYPES.map(mealType => (
                   <TabsContent key={mealType.value} value={mealType.value}>
                     <div className="space-y-3">
-                      {DAYS_OF_WEEK.map((day) => {
+                      {DAYS_OF_WEEK.map(day => {
                         const assignment = getAssignment(day.value, mealType.value);
                         const menu = assignment ? getMenu(assignment.menuId) : null;
 
@@ -313,7 +307,7 @@ export default function AsignarPage() {
                           >
                             <div className="flex items-center gap-3">
                               <span className="font-medium w-24">{day.fullLabel}</span>
-                              
+
                               {menu ? (
                                 <div className="flex items-center gap-2">
                                   {menu.image ? (
@@ -367,25 +361,18 @@ export default function AsignarPage() {
               {shoppingList.length === 0 ? (
                 <div className="text-center py-8 text-gray-400">
                   <ShoppingCart className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                  <p className="text-sm">
-                    No hay ingredientes en la lista
-                  </p>
-                  <p className="text-xs mt-1">
-                    Asigna menús para generar la lista
-                  </p>
+                  <p className="text-sm">No hay ingredientes en la lista</p>
+                  <p className="text-xs mt-1">Asigna menús para generar la lista</p>
                 </div>
               ) : (
                 <>
                   <p className="text-sm text-gray-600 mb-4">
                     {shoppingList.length} ingredientes necesarios
                   </p>
-                  
+
                   <div className="space-y-2">
                     {shoppingList.map((ingredient, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center gap-2 p-2 bg-gray-50 rounded"
-                      >
+                      <div key={index} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
                         <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
                         <span className="text-sm capitalize">{ingredient}</span>
                       </div>

@@ -7,12 +7,9 @@ export async function POST(request: Request) {
   try {
     // Obtener datos de la aplicación
     const data = await jsonBinClient.getData();
-    
+
     if (data.assignments.length === 0) {
-      return NextResponse.json(
-        { error: 'No hay asignaciones para enviar' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'No hay asignaciones para enviar' }, { status: 400 });
     }
 
     // Preparar datos del menú
@@ -41,16 +38,10 @@ export async function POST(request: Request) {
     if (result.success) {
       return NextResponse.json({ success: true });
     } else {
-      return NextResponse.json(
-        { error: result.error },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: result.error }, { status: 500 });
     }
   } catch (error) {
     console.error('Error sending email:', error);
-    return NextResponse.json(
-      { error: 'Error interno del servidor' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 });
   }
 }

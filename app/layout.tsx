@@ -1,30 +1,30 @@
-import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
-import { Navigation } from "@/components/Navigation";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import type { Metadata, Viewport } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import './globals.css';
+import { Toaster } from '@/components/ui/sonner';
+import { Navigation } from '@/components/Navigation';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  title: "Morfi-Plan - Planificación Semanal de Comidas",
-  description: "Planifica tus comidas semanales, gestiona menús y recibe listas de compras",
-  keywords: ["comidas", "planificación", "menú semanal", "lista de compras"],
+  title: 'Morfi-Plan - Planificación Semanal de Comidas',
+  description: 'Planifica tus comidas semanales, gestiona menús y recibe listas de compras',
+  keywords: ['comidas', 'planificación', 'menú semanal', 'lista de compras'],
 };
 
 export const viewport: Viewport = {
-  width: "device-width",
+  width: 'device-width',
   initialScale: 1,
-  themeColor: "#16a34a",
+  themeColor: '#16a34a',
 };
 
 export default function RootLayout({
@@ -39,9 +39,7 @@ export default function RootLayout({
       >
         <Navigation />
         <TooltipProvider>
-          <main className="pt-16 pb-20 md:pb-8">
-            {children}
-          </main>
+          <main className="pt-16 pb-20 md:pb-8">{children}</main>
         </TooltipProvider>
         <Toaster position="top-center" />
       </body>

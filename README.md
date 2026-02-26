@@ -16,6 +16,7 @@ Aplicación para planificar comidas semanales. Gestiona menús, asigna comidas a
 ### 1. Crear cuentas necesarias
 
 #### JSONBin.io (para persistencia de datos)
+
 1. Ve a [https://jsonbin.io](https://jsonbin.io)
 2. Crea una cuenta gratuita
 3. Obtén tu **API Key** en [https://jsonbin.io/api-keys](https://jsonbin.io/api-keys)
@@ -23,6 +24,7 @@ Aplicación para planificar comidas semanales. Gestiona menús, asigna comidas a
 5. Copia el **Bin ID** (está en la URL: `https://jsonbin.io/app/bins/xxxxxxxxxxxxx`)
 
 #### Resend (para envío de emails)
+
 1. Ve a [https://resend.com](https://resend.com)
 2. Crea una cuenta gratuita
 3. Obtén tu **API Key** en [https://resend.com/api-keys](https://resend.com/api-keys)
@@ -92,7 +94,7 @@ morfi-plan/
 
 - Las claves API deben mantenerse privadas
 - `NEXT_PUBLIC_*` son accesibles desde el cliente
-- `RESEND_API_KEY` es solo del servidor (sin NEXT_PUBLIC_)
+- `RESEND_API_KEY` es solo del servidor (sin NEXT*PUBLIC*)
 
 ## 📄 Licencia
 

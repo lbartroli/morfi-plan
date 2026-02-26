@@ -35,7 +35,7 @@ export class JsonBinClient {
     }
 
     const url = `${JSONBIN_API_URL}/${this.binId}`;
-    
+
     try {
       const options: RequestInit = {
         method,
@@ -44,11 +44,11 @@ export class JsonBinClient {
           'X-Master-Key': this.apiKey,
         },
       };
-      
+
       if (body) {
         options.body = JSON.stringify(body);
       }
-      
+
       const response = await fetch(url, options);
 
       if (!response.ok) {
@@ -82,12 +82,12 @@ export class JsonBinClient {
     if (typeof window !== 'undefined') {
       localStorage.setItem('morfi-data', JSON.stringify(data));
     }
-    
+
     // Luego intentar actualizar JSONBin
     if (this.apiKey && this.binId) {
       return await this.request('PUT', data);
     }
-    
+
     return data;
   }
 
@@ -133,7 +133,12 @@ export class JsonBinClient {
     const data = await this.getData();
     // Eliminar asignación existente para ese día/tipo si existe
     data.assignments = data.assignments.filter(
-      a => !(a.day === assignment.day && a.mealType === assignment.mealType && a.weekOffset === assignment.weekOffset)
+      a =>
+        !(
+          a.day === assignment.day &&
+          a.mealType === assignment.mealType &&
+          a.weekOffset === assignment.weekOffset
+        )
     );
     data.assignments.push(assignment);
     await this.updateData(data);
@@ -163,7 +168,7 @@ export class JsonBinClient {
   // Generar lista de compras
   getShoppingList(menus: Menu[], assignments: Assignment[]): string[] {
     const ingredients = new Set<string>();
-    
+
     assignments.forEach(assignment => {
       const menu = menus.find(m => m.id === assignment.menuId);
       if (menu) {
@@ -172,7 +177,7 @@ export class JsonBinClient {
         });
       }
     });
-    
+
     return Array.from(ingredients).sort();
   }
 }

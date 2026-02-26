@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Home, BookOpen, Calendar, Menu, X } from "lucide-react";
+import { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Home, BookOpen, Calendar, Menu, X } from 'lucide-react';
 
 const navItems = [
-  { href: "/", label: "Inicio", icon: Home },
-  { href: "/menus", label: "Menús", icon: BookOpen },
-  { href: "/asignar", label: "Asignar", icon: Calendar },
+  { href: '/', label: 'Inicio', icon: Home },
+  { href: '/menus', label: 'Menús', icon: BookOpen },
+  { href: '/asignar', label: 'Asignar', icon: Calendar },
 ];
 
 export function Navigation() {
@@ -24,23 +24,21 @@ export function Navigation() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <span className="text-2xl">🍳</span>
-            <span className="font-bold text-lg text-gray-900">
-              Morfi-Plan
-            </span>
+            <span className="font-bold text-lg text-gray-900">Morfi-Plan</span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => {
+            {navItems.map(item => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
-              
+
               return (
                 <Link key={item.href} href={item.href}>
                   <Button
-                    variant={isActive ? "default" : "ghost"}
+                    variant={isActive ? 'default' : 'ghost'}
                     size="sm"
-                    className={`gap-2 ${isActive ? "bg-green-600 hover:bg-green-700" : ""}`}
+                    className={`gap-2 ${isActive ? 'bg-green-600 hover:bg-green-700' : ''}`}
                   >
                     <Icon className="w-4 h-4" />
                     {item.label}
@@ -63,22 +61,18 @@ export function Navigation() {
                   <span className="text-2xl">🍳</span>
                   <span className="font-bold text-lg">Morfi-Plan</span>
                 </div>
-                
+
                 <nav className="flex flex-col gap-2">
-                  {navItems.map((item) => {
+                  {navItems.map(item => {
                     const Icon = item.icon;
                     const isActive = pathname === item.href;
-                    
+
                     return (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        onClick={() => setIsOpen(false)}
-                      >
+                      <Link key={item.href} href={item.href} onClick={() => setIsOpen(false)}>
                         <Button
-                          variant={isActive ? "default" : "ghost"}
+                          variant={isActive ? 'default' : 'ghost'}
                           className={`w-full justify-start gap-3 ${
-                            isActive ? "bg-green-600 hover:bg-green-700" : ""
+                            isActive ? 'bg-green-600 hover:bg-green-700' : ''
                           }`}
                         >
                           <Icon className="w-5 h-5" />

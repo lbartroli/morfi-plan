@@ -53,10 +53,15 @@ export const getNextMeal = (
   assignments: Assignment[],
   menus: Menu[],
   currentDate: Date = new Date()
-): { assignment: Assignment | null; menu: Menu | null; day: DayOfWeek; mealType: MealType } | null => {
+): {
+  assignment: Assignment | null;
+  menu: Menu | null;
+  day: DayOfWeek;
+  mealType: MealType;
+} | null => {
   const currentDay = currentDate.getDay();
   const currentHour = currentDate.getHours();
-  
+
   // Convertir día de la semana (0=Domingo, 1=Lunes, ...) a nuestro formato
   const dayMap: { [key: number]: DayOfWeek } = {
     1: 'lunes',
@@ -65,19 +70,19 @@ export const getNextMeal = (
     4: 'jueves',
     5: 'viernes',
   };
-  
+
   const today = dayMap[currentDay];
-  
+
   if (!today) return null; // Es fin de semana
-  
+
   // Determinar si ya pasó el almuerzo (14:00) y la cena (21:00)
   const isLunchTime = currentHour < 14;
   const isDinnerTime = currentHour >= 14 && currentHour < 21;
-  
+
   // Buscar la próxima comida
   const daysOrder: DayOfWeek[] = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
   const todayIndex = daysOrder.indexOf(today);
-  
+
   // Buscar en el día actual primero
   if (isLunchTime) {
     const assignment = assignments.find(a => a.day === today && a.mealType === 'almuerzo');
@@ -86,7 +91,7 @@ export const getNextMeal = (
       return { assignment, menu: menu || null, day: today, mealType: 'almuerzo' };
     }
   }
-  
+
   if (isLunchTime || isDinnerTime) {
     const assignment = assignments.find(a => a.day === today && a.mealType === 'cena');
     if (assignment) {
@@ -94,19 +99,24 @@ export const getNextMeal = (
       return { assignment, menu: menu || null, day: today, mealType: 'cena' };
     }
   }
-  
+
   // Buscar en los siguientes días
   for (let i = 1; i < 5; i++) {
     const nextIndex = (todayIndex + i) % 5;
     const nextDay = daysOrder[nextIndex];
-    
+
     // Primero buscar almuerzo
     const lunchAssignment = assignments.find(a => a.day === nextDay && a.mealType === 'almuerzo');
     if (lunchAssignment) {
       const menu = menus.find(m => m.id === lunchAssignment.menuId);
-      return { assignment: lunchAssignment, menu: menu || null, day: nextDay, mealType: 'almuerzo' };
+      return {
+        assignment: lunchAssignment,
+        menu: menu || null,
+        day: nextDay,
+        mealType: 'almuerzo',
+      };
     }
-    
+
     // Luego cena
     const dinnerAssignment = assignments.find(a => a.day === nextDay && a.mealType === 'cena');
     if (dinnerAssignment) {
@@ -114,7 +124,7 @@ export const getNextMeal = (
       return { assignment: dinnerAssignment, menu: menu || null, day: nextDay, mealType: 'cena' };
     }
   }
-  
+
   return null;
 };
 
@@ -136,9 +146,9 @@ export const getWeekDays = (weekStart: Date): WeekDay[] => {
     jueves: { label: 'Jue', fullLabel: 'Jueves' },
     viernes: { label: 'Vie', fullLabel: 'Viernes' },
   };
-  
+
   const dayKeys: DayOfWeek[] = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
-  
+
   dayKeys.forEach((dayKey, index) => {
     const date = new Date(weekStart);
     date.setDate(weekStart.getDate() + index);
@@ -148,6 +158,6 @@ export const getWeekDays = (weekStart: Date): WeekDay[] => {
       date,
     });
   });
-  
+
   return days;
 };
