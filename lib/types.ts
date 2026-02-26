@@ -23,7 +23,7 @@ export interface AppData {
   menus: Menu[];
   assignments: Assignment[];
   config: {
-    email: string;
+    emails: string[];
     sendDay: 'sunday' | 'saturday';
     sendHour: number;
   };

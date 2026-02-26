@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { emailService } from '@/lib/email';
 import { jsonBinClient } from '@/lib/jsonbin';
-import { DAYS_OF_WEEK, MEAL_TYPES } from '@/lib/types';
 
 export async function POST(_request: Request) {
   try {
@@ -12,31 +11,25 @@ export async function POST(_request: Request) {
       return NextResponse.json({ error: 'No hay asignaciones para enviar' }, { status: 400 });
     }
 
-    // Preparar datos del menú
-    const menuNames = data.assignments
-      .filter(a => a.weekOffset === 0)
-      .map(a => {
-        const menu = data.menus.find(m => m.id === a.menuId);
-        return {
-          day: DAYS_OF_WEEK.find(d => d.value === a.day)?.fullLabel || a.day,
-          mealType: MEAL_TYPES.find(m => m.value === a.mealType)?.label || a.mealType,
-          menuName: menu?.name || 'Menú desconocido',
-        };
-      });
+    // Filter valid emails
+    const validEmails = data.config.emails.filter(e => e && e.trim() !== '');
+    
+    if (validEmails.length === 0) {
+      return NextResponse.json({ error: 'No hay emails configurados' }, { status: 400 });
+    }
 
     // Generar lista de compras
     const shoppingList = jsonBinClient.getShoppingList(data.menus, data.assignments);
 
-    // Enviar email
+    // Enviar email a todos los destinatarios
     const result = await emailService.sendWeeklyMenu(
-      data.config.email,
+      validEmails,
       new Date(),
-      menuNames,
       shoppingList
     );
 
     if (result.success) {
-      return NextResponse.json({ success: true });
+      return NextResponse.json({ success: true, recipients: validEmails.length });
     } else {
       return NextResponse.json({ error: result.error }, { status: 500 });
     }

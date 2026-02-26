@@ -118,22 +118,9 @@ export default function AsignarPage() {
     try {
       const weekStart = getCurrentWeekStart();
 
-      // Preparar datos del menú
-      const menuNames = data.assignments
-        .filter(a => a.weekOffset === 0)
-        .map(a => {
-          const menu = data.menus.find(m => m.id === a.menuId);
-          return {
-            day: DAYS_OF_WEEK.find(d => d.value === a.day)?.fullLabel || a.day,
-            mealType: MEAL_TYPES.find(m => m.value === a.mealType)?.label || a.mealType,
-            menuName: menu?.name || 'Menú desconocido',
-          };
-        });
-
       const result = await emailService.sendWeeklyMenu(
-        data.config.email,
+        data.config.emails,
         weekStart,
-        menuNames,
         shoppingList
       );
 

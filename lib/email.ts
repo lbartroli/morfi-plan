@@ -12,32 +12,13 @@ export class EmailService {
   }
 
   async sendWeeklyMenu(
-    to: string,
+    to: string[],
     weekStart: Date,
-    menuNames: { day: string; mealType: string; menuName: string }[],
     shoppingList: string[]
   ): Promise<{ success: boolean; error?: string }> {
     if (!this.resend) {
       return { success: false, error: 'Resend no configurado' };
     }
-
-    const weekLabel = weekStart.toLocaleDateString('es-ES', {
-      month: 'long',
-      day: 'numeric',
-    });
-
-    // Formatear el menú semanal
-    const menuHtml = menuNames
-      .map(
-        item => `
-          <tr>
-            <td style="padding: 10px; border: 1px solid #e5e7eb;">${item.day}</td>
-            <td style="padding: 10px; border: 1px solid #e5e7eb;">${item.mealType}</td>
-            <td style="padding: 10px; border: 1px solid #e5e7eb; font-weight: bold;">${item.menuName}</td>
-          </tr>
-        `
-      )
-      .join('');
 
     // Formatear lista de compras
     const shoppingHtml = shoppingList
@@ -50,23 +31,8 @@ export class EmailService {
 
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h1 style="color: #16a34a; margin-bottom: 20px;">🍽️ Menú Semanal - ${weekLabel}</h1>
+        <h1 style="color: #16a34a; margin-bottom: 20px;">🛒 Lista de Compras para esta semana</h1>
         
-        <h2 style="color: #374151; margin-top: 30px;">Planificación</h2>
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
-          <thead>
-            <tr style="background-color: #f3f4f6;">
-              <th style="padding: 10px; border: 1px solid #e5e7eb; text-align: left;">Día</th>
-              <th style="padding: 10px; border: 1px solid #e5e7eb; text-align: left;">Comida</th>
-              <th style="padding: 10px; border: 1px solid #e5e7eb; text-align: left;">Menú</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${menuHtml}
-          </tbody>
-        </table>
-        
-        <h2 style="color: #374151;">🛒 Lista de Compras</h2>
         <ul style="list-style: none; padding: 0;">
           ${shoppingHtml}
         </ul>
@@ -79,9 +45,9 @@ export class EmailService {
 
     try {
       const { error } = await this.resend.emails.send({
-        from: 'Morfi-Plan <noreply@morfi-plan.resend.dev>',
-        to: [to],
-        subject: `🍽️ Menú Semanal - Semana del ${weekLabel}`,
+        from: 'Morfi-Plan <morfi-plan@resend.dev>',
+        to: to,
+        subject: `🛒 Lista de Compras para esta semana`,
         html,
       });
 

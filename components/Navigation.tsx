@@ -5,13 +5,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Home, BookOpen, Calendar, Menu } from 'lucide-react';
+import { Home, BookOpen, Calendar, Menu, Settings } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 
 const navItems = [
   { href: '/', label: 'Inicio', icon: Home },
   { href: '/menus', label: 'Menús', icon: BookOpen },
   { href: '/asignar', label: 'Asignar', icon: Calendar },
+  { href: '/config', label: 'Configuración', icon: Settings },
 ];
 
 export function Navigation() {

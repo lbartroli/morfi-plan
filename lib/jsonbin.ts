@@ -9,7 +9,7 @@ const defaultData: AppData = {
   menus: [],
   assignments: [],
   config: {
-    email: 'lgbartroli@gmail.com',
+    emails: ['lgbartroli@gmail.com'],
     sendDay: 'sunday',
     sendHour: 9,
   },
@@ -22,6 +22,12 @@ export class JsonBinClient {
   constructor() {
     this.apiKey = JSONBIN_API_KEY;
     this.binId = JSONBIN_BIN_ID;
+    console.log('JSONBin Client initialized:', {
+      hasApiKey: !!this.apiKey,
+      apiKeyLength: this.apiKey?.length,
+      hasBinId: !!this.binId,
+      binId: this.binId,
+    });
   }
 
   private async request(method: string, body?: unknown): Promise<AppData> {
@@ -49,10 +55,20 @@ export class JsonBinClient {
         options.body = JSON.stringify(body);
       }
 
-      const response = await fetch(url, options);
+        const response = await fetch(url, options);
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        console.error('JSONBin error response:', {
+          status: response.status,
+          statusText: response.statusText,
+          body: errorText,
+          url: url,
+          apiKeyFirst10: this.apiKey?.substring(0, 10),
+          apiKeyLast10: this.apiKey?.substring(this.apiKey.length - 10),
+          binId: this.binId,
+        });
+        throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
       }
 
       const result = await response.json();
@@ -85,7 +101,13 @@ export class JsonBinClient {
 
     // Luego intentar actualizar JSONBin
     if (this.apiKey && this.binId) {
-      return await this.request('PUT', data);
+      try {
+        return await this.request('PUT', data);
+      } catch (error) {
+        console.warn('JSONBin update failed, using localStorage fallback:', error);
+        // Return localStorage data since JSONBin failed
+        return data;
+      }
     }
 
     return data;
