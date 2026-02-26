@@ -222,7 +222,7 @@ export default function Dashboard() {
             </>
           ) : (
             <>
-              <CardHeader className="pb-3 pt-4 bg-gradient-to-r from-green-600 to-green-500">
+              <CardHeader className="pb-3 pt-4 bg-linear-to-r from-green-600 to-green-500">
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-white" />
                   <CardTitle className="text-base text-white">{currentMeal.label}</CardTitle>

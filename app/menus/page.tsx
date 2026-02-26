@@ -214,7 +214,7 @@ export default function MenusPage() {
                   <Button
                     variant="secondary"
                     size="icon"
-                    className="h-8 w-8 bg-white/90 hover:bg-white"
+                    className="h-8 w-8 bg-background/90 hover:bg-background"
                     onClick={() => handleEdit(menu)}
                   >
                     <Pencil className="w-4 h-4" />
@@ -235,7 +235,9 @@ export default function MenusPage() {
               </CardHeader>
 
               <CardContent className="pt-0">
-                <p className="text-sm text-muted-foreground mb-3">{menu.ingredients.length} ingredientes</p>
+                <p className="text-sm text-muted-foreground mb-3">
+                  {menu.ingredients.length} ingredientes
+                </p>
                 <div className="flex flex-wrap gap-1">
                   {menu.ingredients.slice(0, 5).map((ingredient, idx) => (
                     <Badge key={idx} variant="secondary" className="text-xs">
@@ -292,7 +294,9 @@ export default function MenusPage() {
                 onChange={e => setFormData({ ...formData, image: e.target.value })}
                 placeholder="https://ejemplo.com/imagen.jpg"
               />
-                <p className="text-xs text-muted-foreground">Pega aquí el enlace de una imagen de tu plato</p>
+              <p className="text-xs text-muted-foreground">
+                Pega aquí el enlace de una imagen de tu plato
+              </p>
             </div>
 
             {formData.image && (

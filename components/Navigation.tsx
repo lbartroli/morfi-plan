@@ -39,7 +39,7 @@ export function Navigation() {
                   <Button
                     variant={isActive ? 'default' : 'ghost'}
                     size="sm"
-                    className={`gap-2 ${isActive ? 'bg-green-600 hover:bg-green-700' : ''}`}
+                    className={`gap-2 ${isActive ? 'bg-green-600 hover:bg-green-700 dark:text-white' : ''}`}
                   >
                     <Icon className="w-4 h-4" />
                     {item.label}
