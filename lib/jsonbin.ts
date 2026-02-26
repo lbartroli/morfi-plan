@@ -18,21 +18,77 @@ const defaultData: AppData = {
 export class JsonBinClient {
   private apiKey: string | undefined;
   private binId: string | undefined;
+  private isInitialized: boolean = false;
 
   constructor() {
     this.apiKey = JSONBIN_API_KEY;
     this.binId = JSONBIN_BIN_ID;
   }
 
+  private async createBin(): Promise<string | null> {
+    if (!this.apiKey) return null;
+
+    try {
+      const response = await fetch(JSONBIN_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': this.apiKey,
+          'X-Bin-Name': 'morfi-plan-data',
+          'X-Bin-Private': 'false',
+        },
+        body: JSON.stringify(defaultData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to create bin: ${response.status}`);
+      }
+
+      const result = await response.json();
+      const newBinId = result.metadata?.id;
+      
+      if (newBinId) {
+        console.log('Nuevo bin creado:', newBinId);
+        this.binId = newBinId;
+        return newBinId;
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('Error creating bin:', error);
+      return null;
+    }
+  }
+
   private async request(method: string, body?: unknown): Promise<AppData> {
-    if (!this.apiKey || !this.binId) {
+    if (!this.apiKey) {
       console.warn('JSONBin no configurado, usando datos locales');
-      // Intentar cargar de localStorage como fallback
       if (typeof window !== 'undefined') {
         const local = localStorage.getItem('morfi-data');
         if (local) return JSON.parse(local);
       }
       return defaultData;
+    }
+
+    // Si no hay binId o no está inicializado, intentar crear uno
+    if (!this.binId || !this.isInitialized) {
+      if (!this.binId) {
+        const newBinId = await this.createBin();
+        if (newBinId) {
+          this.binId = newBinId;
+          this.isInitialized = true;
+          // Guardar en localStorage el nuevo binId para referencia
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('morfi-bin-id', newBinId);
+          }
+          // Si estamos creando el bin con PUT, retornar los datos
+          if (method === 'PUT' && body) {
+            return body as AppData;
+          }
+          // Para GET después de crear, retornar defaultData
+          return defaultData;
+        }
+      }
     }
 
     const url = `${JSONBIN_API_URL}/${this.binId}`;
@@ -52,10 +108,29 @@ export class JsonBinClient {
       
       const response = await fetch(url, options);
 
+      // Si el bin no existe (404), intentar crearlo
+      if (response.status === 404 && !this.isInitialized) {
+        console.log('Bin no encontrado, creando nuevo...');
+        const newBinId = await this.createBin();
+        if (newBinId) {
+          this.binId = newBinId;
+          this.isInitialized = true;
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('morfi-bin-id', newBinId);
+          }
+          // Si estamos haciendo PUT, guardar los datos
+          if (method === 'PUT' && body) {
+            return body as AppData;
+          }
+          return defaultData;
+        }
+      }
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
+      this.isInitialized = true;
       const result = await response.json();
       return result.record || defaultData;
     } catch (error) {
@@ -85,7 +160,7 @@ export class JsonBinClient {
     }
     
     // Luego intentar actualizar JSONBin
-    if (this.apiKey && this.binId) {
+    if (this.apiKey) {
       return await this.request('PUT', data);
     }
     
