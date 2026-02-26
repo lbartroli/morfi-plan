@@ -154,7 +154,165 @@ export default function Dashboard() {
         </Link>
       </div>
 
-      {/* Calendario Semanal */}
+      {/* Comida del Día - AHORA PRIMERO */}
+      {currentMeal && (
+        <Card className="overflow-hidden relative border-0 shadow-lg mb-6">
+          {currentMeal.menu?.image ? (
+            <>
+              {/* Background Image */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={currentMeal.menu.image}
+                alt={currentMeal.menu.name}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30" />
+              {/* Content */}
+              <div className="relative z-10 p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Clock className="w-4 h-4 text-white/80" />
+                  <span className="text-sm font-medium text-white/80">{currentMeal.label}</span>
+                </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <Badge className="bg-white/20 text-white border-0 text-xs">
+                    {DAYS_OF_WEEK.find(d => d.value === currentMeal.day)?.fullLabel}
+                  </Badge>
+                  <Badge className="bg-green-500 text-white border-0 text-xs">
+                    {MEAL_TYPES.find(m => m.value === currentMeal.mealType)?.label}
+                  </Badge>
+                </div>
+                <h3 className="text-2xl font-bold text-white drop-shadow-lg mb-4">
+                  {currentMeal.menu.name}
+                </h3>
+
+                {/* Ingredientes expandibles */}
+                <Collapsible open={ingredientsOpen} onOpenChange={setIngredientsOpen}>
+                  <CollapsibleTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="justify-between h-9 text-sm text-white/90 hover:bg-white/20 hover:text-white px-3 -ml-3 bg-white/10 backdrop-blur-sm rounded-lg"
+                    >
+                      <span className="flex items-center gap-2">
+                        <List className="w-4 h-4" />
+                        Ver ingredientes ({currentMeal.menu.ingredients.length})
+                      </span>
+                      <ChevronDown
+                        className={`w-4 h-4 transition-transform ${ingredientsOpen ? 'rotate-180' : ''}`}
+                      />
+                    </Button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <div className="mt-3 p-3 bg-black/40 backdrop-blur-sm rounded-lg border border-white/20">
+                      <div className="flex flex-wrap gap-2">
+                        {currentMeal.menu.ingredients.map((ingredient, idx) => (
+                          <Badge
+                            key={idx}
+                            className="text-sm font-normal capitalize bg-white/20 text-white border-0"
+                          >
+                            {ingredient}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
+              </div>
+            </>
+          ) : (
+            <>
+              <CardHeader className="pb-3 pt-4 bg-gradient-to-r from-green-600 to-green-500">
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-white" />
+                  <CardTitle className="text-base text-white">{currentMeal.label}</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-4">
+                {currentMeal.menu ? (
+                  <div>
+                    <div className="flex items-start gap-4 mb-3">
+                      <div className="w-20 h-20 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0 border-2 border-gray-200">
+                        <UtensilsCrossed className="w-8 h-8 text-gray-400" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <Badge variant="secondary" className="text-xs">
+                            {DAYS_OF_WEEK.find(d => d.value === currentMeal.day)?.fullLabel}
+                          </Badge>
+                          <Badge variant="outline" className="text-xs">
+                            {MEAL_TYPES.find(m => m.value === currentMeal.mealType)?.label}
+                          </Badge>
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          {currentMeal.menu.name}
+                        </h3>
+                      </div>
+                    </div>
+
+                    {/* Ingredientes expandibles */}
+                    <Collapsible open={ingredientsOpen} onOpenChange={setIngredientsOpen}>
+                      <CollapsibleTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full justify-between h-8 text-xs bg-white hover:bg-gray-50"
+                        >
+                          <span className="flex items-center gap-2">
+                            <List className="w-3.5 h-3.5" />
+                            Ver ingredientes ({currentMeal.menu.ingredients.length})
+                          </span>
+                          <ChevronDown
+                            className={`w-4 h-4 transition-transform ${ingredientsOpen ? 'rotate-180' : ''}`}
+                          />
+                        </Button>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                          <div className="flex flex-wrap gap-1.5">
+                            {currentMeal.menu.ingredients.map((ingredient, idx) => (
+                              <Badge
+                                key={idx}
+                                variant="secondary"
+                                className="text-xs font-normal capitalize"
+                              >
+                                {ingredient}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-4">
+                    <div className="w-20 h-20 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0 border-2 border-gray-200">
+                      <UtensilsCrossed className="w-8 h-8 text-gray-400" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-base font-semibold text-gray-900 mb-0.5">
+                        Sin menú asignado
+                      </h3>
+                      <p className="text-xs text-gray-600 mb-2">
+                        No hay {currentMeal.mealType === 'almuerzo' ? 'almuerzo' : 'cena'} asignado
+                        para hoy
+                      </p>
+                      <Link href="/asignar">
+                        <Button size="sm" className="h-7 text-xs bg-green-600 hover:bg-green-700">
+                          <Plus className="w-3.5 h-3.5 mr-1" />
+                          Asignar {currentMeal.mealType === 'almuerzo' ? 'Almuerzo' : 'Cena'}
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </>
+          )}
+        </Card>
+      )}
+
+      {/* Calendario Semanal - AHORA DESPUÉS */}
       <Card className="mb-6">
         <CardHeader className="pb-3 pt-4">
           <div className="flex items-center gap-2">
@@ -198,7 +356,7 @@ export default function Dashboard() {
                                 {/* Gradient Overlay */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
                                 {/* Content */}
-                                <div className="relative z-10 p-2 h-full flex flex-col justify-between min-h-[80px]">
+                                <div className="relative z-10 p-2 h-full flex flex-col justify-between min-h-[70px]">
                                   <div className="flex items-center justify-between">
                                     <span className="font-semibold text-white text-xs drop-shadow-md">
                                       {weekDay.label}
@@ -397,106 +555,6 @@ export default function Dashboard() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Comida del Día */}
-      {currentMeal && (
-        <Card className="border-green-200 bg-green-50">
-          <CardHeader className="pb-3 pt-4">
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-green-600" />
-              <CardTitle className="text-base text-green-800">{currentMeal.label}</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-0">
-            {currentMeal.menu ? (
-              <div>
-                <div className="flex items-start gap-3 mb-3">
-                  {currentMeal.menu.image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={currentMeal.menu.image}
-                      alt={currentMeal.menu.name}
-                      className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
-                    />
-                  ) : (
-                    <div className="w-16 h-16 rounded-lg bg-gray-200 flex items-center justify-center flex-shrink-0">
-                      <UtensilsCrossed className="w-6 h-6 text-gray-400" />
-                    </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Badge variant="secondary" className="text-xs">
-                        {DAYS_OF_WEEK.find(d => d.value === currentMeal.day)?.fullLabel}
-                      </Badge>
-                      <Badge variant="outline" className="text-xs">
-                        {MEAL_TYPES.find(m => m.value === currentMeal.mealType)?.label}
-                      </Badge>
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-900 truncate">
-                      {currentMeal.menu.name}
-                    </h3>
-                  </div>
-                </div>
-
-                {/* Ingredientes expandibles */}
-                <Collapsible open={ingredientsOpen} onOpenChange={setIngredientsOpen}>
-                  <CollapsibleTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full justify-between h-8 text-xs bg-white hover:bg-gray-50"
-                    >
-                      <span className="flex items-center gap-2">
-                        <List className="w-3.5 h-3.5" />
-                        Ver ingredientes ({currentMeal.menu.ingredients.length})
-                      </span>
-                      <ChevronDown
-                        className={`w-4 h-4 transition-transform ${ingredientsOpen ? 'rotate-180' : ''}`}
-                      />
-                    </Button>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <div className="mt-3 p-3 bg-white rounded-lg border border-green-200">
-                      <div className="flex flex-wrap gap-1.5">
-                        {currentMeal.menu.ingredients.map((ingredient, idx) => (
-                          <Badge
-                            key={idx}
-                            variant="secondary"
-                            className="text-xs font-normal capitalize"
-                          >
-                            {ingredient}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  </CollapsibleContent>
-                </Collapsible>
-              </div>
-            ) : (
-              <div className="flex items-center gap-3">
-                <div className="w-16 h-16 rounded-lg bg-gray-200 flex items-center justify-center flex-shrink-0">
-                  <UtensilsCrossed className="w-6 h-6 text-gray-400" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-base font-semibold text-gray-900 mb-0.5">
-                    Sin menú asignado
-                  </h3>
-                  <p className="text-xs text-gray-600 mb-2">
-                    No hay {currentMeal.mealType === 'almuerzo' ? 'almuerzo' : 'cena'} asignado para
-                    hoy
-                  </p>
-                  <Link href="/asignar">
-                    <Button size="sm" className="h-7 text-xs bg-green-600 hover:bg-green-700">
-                      <Plus className="w-3.5 h-3.5 mr-1" />
-                      Asignar {currentMeal.mealType === 'almuerzo' ? 'Almuerzo' : 'Cena'}
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }
