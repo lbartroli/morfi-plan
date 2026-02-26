@@ -167,7 +167,7 @@ export default function Dashboard() {
                 className="absolute inset-0 w-full h-full object-cover"
               />
               {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/60 to-black/30" />
               {/* Content */}
               <div className="relative z-10 p-5">
                 <div className="flex items-center gap-2 mb-3">
@@ -382,7 +382,7 @@ export default function Dashboard() {
                               </>
                             ) : (
                               <>
-                                <CardHeader className="pb-1 pt-1.5 px-2">
+                                <CardHeader className="pb-0.5 pt-1.5 px-2">
                                   <div className="flex items-center justify-between">
                                     <span className="font-semibold text-gray-900 text-xs">
                                       {weekDay.label}
@@ -393,27 +393,26 @@ export default function Dashboard() {
                                       </Badge>
                                     )}
                                   </div>
-                                  <span className="text-[10px] text-gray-500">
+                                  <span className="text-[10px] text-gray-500 leading-none">
                                     {weekDay.date.toLocaleDateString('es-ES', {
                                       day: 'numeric',
                                       month: 'short',
                                     })}
                                   </span>
                                 </CardHeader>
-                                <CardContent className="pt-0 pb-1.5 px-2">
+                                <CardContent className="pt-0 pb-1 px-2">
                                   {menu ? (
-                                    <div className="space-y-1">
-                                      <div className="w-full h-10 bg-gray-200 rounded flex items-center justify-center">
-                                        <ChefHat className="w-4 h-4 text-gray-400" />
+                                    <div className="flex items-center gap-1">
+                                      <div className="w-6 h-6 bg-gray-200 rounded flex items-center justify-center flex-shrink-0">
+                                        <ChefHat className="w-3 h-3 text-gray-400" />
                                       </div>
-                                      <p className="font-medium text-[10px] text-gray-900 line-clamp-1 leading-tight">
+                                      <p className="font-medium text-[10px] text-gray-900 line-clamp-1 leading-none">
                                         {menu.name}
                                       </p>
                                     </div>
                                   ) : (
-                                    <div className="text-center py-1.5 text-gray-400">
-                                      <ChefHat className="w-4 h-4 mx-auto mb-0.5 opacity-50" />
-                                      <p className="text-[10px]">Sin asignar</p>
+                                    <div className="text-center py-1 text-gray-400">
+                                      <ChefHat className="w-3 h-3 mx-auto opacity-50" />
                                     </div>
                                   )}
                                 </CardContent>
@@ -508,7 +507,7 @@ export default function Dashboard() {
                             </>
                           ) : (
                             <>
-                              <CardHeader className="pb-1 pt-2 px-3">
+                              <CardHeader className="pb-0.5 pt-2 px-3">
                                 <div className="flex items-center justify-between">
                                   <span className="font-semibold text-gray-900 text-sm">
                                     {weekDay.fullLabel}
@@ -519,7 +518,7 @@ export default function Dashboard() {
                                     </Badge>
                                   )}
                                 </div>
-                                <span className="text-xs text-gray-500">
+                                <span className="text-xs text-gray-500 leading-none">
                                   {weekDay.date.toLocaleDateString('es-ES', {
                                     day: 'numeric',
                                     month: 'short',
@@ -528,18 +527,17 @@ export default function Dashboard() {
                               </CardHeader>
                               <CardContent className="pt-0 pb-2 px-3">
                                 {menu ? (
-                                  <div className="space-y-1.5">
-                                    <div className="w-full h-12 bg-gray-200 rounded-md flex items-center justify-center">
-                                      <ChefHat className="w-6 h-6 text-gray-400" />
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-8 h-8 bg-gray-200 rounded flex items-center justify-center flex-shrink-0">
+                                      <ChefHat className="w-4 h-4 text-gray-400" />
                                     </div>
-                                    <p className="font-medium text-sm text-gray-900 line-clamp-2">
+                                    <p className="font-medium text-sm text-gray-900 line-clamp-1">
                                       {menu.name}
                                     </p>
                                   </div>
                                 ) : (
-                                  <div className="text-center py-2 text-gray-400">
-                                    <ChefHat className="w-6 h-6 mx-auto mb-1 opacity-50" />
-                                    <p className="text-sm">Sin asignar</p>
+                                  <div className="text-center py-1 text-gray-400">
+                                    <ChefHat className="w-5 h-5 mx-auto opacity-50" />
                                   </div>
                                 )}
                               </CardContent>
