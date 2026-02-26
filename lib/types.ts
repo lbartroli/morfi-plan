@@ -1,5 +1,13 @@
 export type DayOfWeek = 'lunes' | 'martes' | 'miercoles' | 'jueves' | 'viernes';
 export type MealType = 'almuerzo' | 'cena';
+export type SendDay =
+  | 'monday'
+  | 'tuesday'
+  | 'wednesday'
+  | 'thursday'
+  | 'friday'
+  | 'saturday'
+  | 'sunday';
 
 export interface Menu {
   id: string;
@@ -24,7 +32,7 @@ export interface AppData {
   assignments: Assignment[];
   config: {
     emails: string[];
-    sendDay: 'sunday' | 'saturday';
+    sendDay: SendDay;
     sendHour: number;
   };
 }

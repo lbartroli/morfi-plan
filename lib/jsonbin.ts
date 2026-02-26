@@ -1,4 +1,4 @@
-import { AppData, Menu, Assignment } from './types';
+import { AppData, Menu, Assignment, SendDay } from './types';
 
 const JSONBIN_API_KEY = process.env.NEXT_PUBLIC_JSONBIN_API_KEY;
 const JSONBIN_BIN_ID = process.env.NEXT_PUBLIC_JSONBIN_BIN_ID;
@@ -10,7 +10,7 @@ const defaultData: AppData = {
   assignments: [],
   config: {
     emails: ['lgbartroli@gmail.com'],
-    sendDay: 'sunday',
+    sendDay: 'sunday' as SendDay,
     sendHour: 9,
   },
 };

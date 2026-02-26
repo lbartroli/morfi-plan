@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { jsonBinClient } from '@/lib/jsonbin';
-import { AppData } from '@/lib/types';
+import { AppData, SendDay } from '@/lib/types';
 import { toast } from 'sonner';
 import { Loader2, Mail, Clock, Calendar, Save, Send, Plus, Trash2 } from 'lucide-react';
 import {
@@ -18,8 +18,13 @@ import {
 } from '@/components/ui/select';
 
 const DAYS_OPTIONS = [
-  { value: 'sunday', label: 'Domingo' },
+  { value: 'monday', label: 'Lunes' },
+  { value: 'tuesday', label: 'Martes' },
+  { value: 'wednesday', label: 'Miércoles' },
+  { value: 'thursday', label: 'Jueves' },
+  { value: 'friday', label: 'Viernes' },
   { value: 'saturday', label: 'Sábado' },
+  { value: 'sunday', label: 'Domingo' },
 ];
 
 const HOUR_OPTIONS = Array.from({ length: 24 }, (_, i) => ({
@@ -287,9 +292,7 @@ export default function ConfigPage() {
             </Label>
             <Select
               value={config.sendDay}
-              onValueChange={value =>
-                setConfig({ ...config, sendDay: value as 'sunday' | 'saturday' })
-              }
+              onValueChange={value => setConfig({ ...config, sendDay: value as SendDay })}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Selecciona un día" />

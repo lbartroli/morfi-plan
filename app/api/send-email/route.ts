@@ -5,9 +5,15 @@ import { jsonBinClient } from '@/lib/jsonbin';
 const CRON_SECRET = process.env.CRON_SECRET;
 
 // Day mapping: config values to JavaScript getUTCDay() values
+// 0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday, 4 = Thursday, 5 = Friday, 6 = Saturday
 const DAY_MAP: { [key: string]: number } = {
-  sunday: 0, // Sunday
-  saturday: 6, // Saturday
+  sunday: 0,
+  monday: 1,
+  tuesday: 2,
+  wednesday: 3,
+  thursday: 4,
+  friday: 5,
+  saturday: 6,
 };
 
 export async function POST(request: Request) {
