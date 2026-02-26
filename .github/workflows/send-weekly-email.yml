@@ -24,9 +24,10 @@ jobs:
           TRIGGER_TYPE="${{ github.event.inputs.trigger_type || 'scheduled' }}"
 
           echo "Trigger type: $TRIGGER_TYPE"
+          echo "App URL: $APP_URL"
 
-          curl -X POST "${{ vars.APP_URL }}/api/send-email" \
-            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+          curl -X POST "$APP_URL/api/send-email" \
+            -H "Authorization: Bearer $CRON_SECRET" \
             -H "Content-Type: application/json" \
             -d "{\"trigger\": \"$TRIGGER_TYPE\"}" \
             --fail-with-body \
@@ -34,3 +35,4 @@ jobs:
             -s
         env:
           APP_URL: ${{ vars.APP_URL || 'https://morfi-plan.vercel.app' }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
