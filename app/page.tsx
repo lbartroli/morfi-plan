@@ -12,7 +12,6 @@ import {
   CalendarDays,
   Clock,
   ChefHat,
-  ArrowRight,
   Loader2,
   UtensilsCrossed,
   BookOpen,
@@ -90,7 +89,7 @@ export default function Dashboard() {
       const appData = await jsonBinClient.getData();
       setData(appData);
       setCurrentMeal(getCurrentDayMeal(appData.assignments, appData.menus));
-    } catch (error) {
+    } catch (_error) {
       toast.error('Error al cargar los datos');
     } finally {
       setLoading(false);
@@ -183,53 +182,85 @@ export default function Dashboard() {
                       <Tooltip key={`${mealType.value}-${weekDay.day}`}>
                         <TooltipTrigger asChild>
                           <Card
-                            className={`cursor-pointer transition-all hover:shadow-md ${
+                            className={`cursor-pointer transition-all hover:shadow-md overflow-hidden relative ${
                               shouldHighlight ? 'ring-2 ring-green-500 ring-offset-1' : ''
                             } ${menu ? '' : 'bg-gray-50'}`}
                           >
-                            <CardHeader className="pb-1 pt-2 px-2">
-                              <div className="flex items-center justify-between">
-                                <span className="font-semibold text-gray-900 text-xs">
-                                  {weekDay.label}
-                                </span>
-                                {isToday && (
-                                  <Badge className="bg-green-100 text-green-800 text-[10px] px-1.5 py-0">
-                                    Hoy
-                                  </Badge>
-                                )}
-                              </div>
-                              <span className="text-[10px] text-gray-500">
-                                {weekDay.date.toLocaleDateString('es-ES', {
-                                  day: 'numeric',
-                                  month: 'short',
-                                })}
-                              </span>
-                            </CardHeader>
-                            <CardContent className="pt-0 pb-2 px-2">
-                              {menu ? (
-                                <div className="space-y-1">
-                                  {menu.image ? (
-                                    <img
-                                      src={menu.image}
-                                      alt={menu.name}
-                                      className="w-full h-10 object-cover rounded"
-                                    />
+                            {menu?.image ? (
+                              <>
+                                {/* Background Image */}
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src={menu.image}
+                                  alt={menu.name}
+                                  className="absolute inset-0 w-full h-full object-cover"
+                                />
+                                {/* Gradient Overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+                                {/* Content */}
+                                <div className="relative z-10 p-2 h-full flex flex-col justify-between min-h-[80px]">
+                                  <div className="flex items-center justify-between">
+                                    <span className="font-semibold text-white text-xs drop-shadow-md">
+                                      {weekDay.label}
+                                    </span>
+                                    {isToday && (
+                                      <Badge className="bg-green-500 text-white text-[10px] px-1.5 py-0 border-0">
+                                        Hoy
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  <div>
+                                    <span className="text-[10px] text-white/80 drop-shadow-md">
+                                      {weekDay.date.toLocaleDateString('es-ES', {
+                                        day: 'numeric',
+                                        month: 'short',
+                                      })}
+                                    </span>
+                                    <p className="font-medium text-[10px] text-white line-clamp-2 leading-tight drop-shadow-md mt-0.5">
+                                      {menu.name}
+                                    </p>
+                                  </div>
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <CardHeader className="pb-1 pt-2 px-2">
+                                  <div className="flex items-center justify-between">
+                                    <span className="font-semibold text-gray-900 text-xs">
+                                      {weekDay.label}
+                                    </span>
+                                    {isToday && (
+                                      <Badge className="bg-green-100 text-green-800 text-[10px] px-1.5 py-0">
+                                        Hoy
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  <span className="text-[10px] text-gray-500">
+                                    {weekDay.date.toLocaleDateString('es-ES', {
+                                      day: 'numeric',
+                                      month: 'short',
+                                    })}
+                                  </span>
+                                </CardHeader>
+                                <CardContent className="pt-0 pb-2 px-2">
+                                  {menu ? (
+                                    <div className="space-y-1">
+                                      <div className="w-full h-10 bg-gray-200 rounded flex items-center justify-center">
+                                        <ChefHat className="w-4 h-4 text-gray-400" />
+                                      </div>
+                                      <p className="font-medium text-[10px] text-gray-900 line-clamp-1 leading-tight">
+                                        {menu.name}
+                                      </p>
+                                    </div>
                                   ) : (
-                                    <div className="w-full h-10 bg-gray-200 rounded flex items-center justify-center">
-                                      <ChefHat className="w-4 h-4 text-gray-400" />
+                                    <div className="text-center py-1.5 text-gray-400">
+                                      <ChefHat className="w-4 h-4 mx-auto mb-0.5 opacity-50" />
+                                      <p className="text-[10px]">Sin asignar</p>
                                     </div>
                                   )}
-                                  <p className="font-medium text-[10px] text-gray-900 line-clamp-1 leading-tight">
-                                    {menu.name}
-                                  </p>
-                                </div>
-                              ) : (
-                                <div className="text-center py-1.5 text-gray-400">
-                                  <ChefHat className="w-4 h-4 mx-auto mb-0.5 opacity-50" />
-                                  <p className="text-[10px]">Sin asignar</p>
-                                </div>
-                              )}
-                            </CardContent>
+                                </CardContent>
+                              </>
+                            )}
                           </Card>
                         </TooltipTrigger>
                         {menu && (
@@ -277,51 +308,85 @@ export default function Dashboard() {
                       return (
                         <Card
                           key={weekDay.day}
-                          className={`${
+                          className={`overflow-hidden relative ${
                             shouldHighlight ? 'ring-2 ring-green-500 ring-offset-2' : ''
                           } ${menu ? '' : 'bg-gray-50'}`}
                         >
-                          <CardHeader className="pb-2 pt-3 px-3">
-                            <div className="flex items-center justify-between">
-                              <span className="font-semibold text-gray-900 text-sm">
-                                {weekDay.fullLabel}
-                              </span>
-                              {isToday && (
-                                <Badge className="bg-green-100 text-green-800 text-xs">Hoy</Badge>
-                              )}
-                            </div>
-                            <span className="text-xs text-gray-500">
-                              {weekDay.date.toLocaleDateString('es-ES', {
-                                day: 'numeric',
-                                month: 'short',
-                              })}
-                            </span>
-                          </CardHeader>
-                          <CardContent className="pt-0">
-                            {menu ? (
-                              <div className="space-y-2">
-                                {menu.image ? (
-                                  <img
-                                    src={menu.image}
-                                    alt={menu.name}
-                                    className="w-full h-20 object-cover rounded-md"
-                                  />
+                          {menu?.image ? (
+                            <>
+                              {/* Background Image */}
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                src={menu.image}
+                                alt={menu.name}
+                                className="absolute inset-0 w-full h-full object-cover"
+                              />
+                              {/* Gradient Overlay */}
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+                              {/* Content */}
+                              <div className="relative z-10 p-3 h-full flex flex-col justify-between min-h-[120px]">
+                                <div className="flex items-center justify-between">
+                                  <span className="font-semibold text-white text-sm drop-shadow-md">
+                                    {weekDay.fullLabel}
+                                  </span>
+                                  {isToday && (
+                                    <Badge className="bg-green-500 text-white text-xs border-0">
+                                      Hoy
+                                    </Badge>
+                                  )}
+                                </div>
+                                <div>
+                                  <span className="text-xs text-white/80 drop-shadow-md">
+                                    {weekDay.date.toLocaleDateString('es-ES', {
+                                      day: 'numeric',
+                                      month: 'short',
+                                    })}
+                                  </span>
+                                  <p className="font-medium text-sm text-white line-clamp-2 drop-shadow-md mt-1">
+                                    {menu.name}
+                                  </p>
+                                </div>
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <CardHeader className="pb-2 pt-3 px-3">
+                                <div className="flex items-center justify-between">
+                                  <span className="font-semibold text-gray-900 text-sm">
+                                    {weekDay.fullLabel}
+                                  </span>
+                                  {isToday && (
+                                    <Badge className="bg-green-100 text-green-800 text-xs">
+                                      Hoy
+                                    </Badge>
+                                  )}
+                                </div>
+                                <span className="text-xs text-gray-500">
+                                  {weekDay.date.toLocaleDateString('es-ES', {
+                                    day: 'numeric',
+                                    month: 'short',
+                                  })}
+                                </span>
+                              </CardHeader>
+                              <CardContent className="pt-0">
+                                {menu ? (
+                                  <div className="space-y-2">
+                                    <div className="w-full h-20 bg-gray-200 rounded-md flex items-center justify-center">
+                                      <ChefHat className="w-8 h-8 text-gray-400" />
+                                    </div>
+                                    <p className="font-medium text-sm text-gray-900 line-clamp-2">
+                                      {menu.name}
+                                    </p>
+                                  </div>
                                 ) : (
-                                  <div className="w-full h-20 bg-gray-200 rounded-md flex items-center justify-center">
-                                    <ChefHat className="w-8 h-8 text-gray-400" />
+                                  <div className="text-center py-4 text-gray-400">
+                                    <ChefHat className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                                    <p className="text-sm">Sin asignar</p>
                                   </div>
                                 )}
-                                <p className="font-medium text-sm text-gray-900 line-clamp-2">
-                                  {menu.name}
-                                </p>
-                              </div>
-                            ) : (
-                              <div className="text-center py-4 text-gray-400">
-                                <ChefHat className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                                <p className="text-sm">Sin asignar</p>
-                              </div>
-                            )}
-                          </CardContent>
+                              </CardContent>
+                            </>
+                          )}
                         </Card>
                       );
                     })}
@@ -347,6 +412,7 @@ export default function Dashboard() {
               <div>
                 <div className="flex items-start gap-3 mb-3">
                   {currentMeal.menu.image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={currentMeal.menu.image}
                       alt={currentMeal.menu.name}
