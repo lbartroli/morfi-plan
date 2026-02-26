@@ -25,6 +25,7 @@ npm run format:check     # Check formatting without writing
 ## Testing
 
 No test framework configured yet. When adding tests:
+
 - Use Vitest for unit tests
 - Use Playwright for E2E tests
 - Place test files alongside source files: `*.test.ts` or `*.test.tsx`
@@ -32,12 +33,14 @@ No test framework configured yet. When adding tests:
 ## Code Style Guidelines
 
 ### TypeScript
+
 - Enable strict mode (already configured)
 - Use explicit return types for exported functions
 - Prefer `interface` over `type` for object shapes
 - Use `type` for unions, literals, and mapped types
 
 ### Naming Conventions
+
 - **Components**: PascalCase (e.g., `Button`, `Navigation`)
 - **Functions/Variables**: camelCase (e.g., `getData`, `isLoading`)
 - **Constants**: UPPER_SNAKE_CASE for true constants (e.g., `DAYS_OF_WEEK`)
@@ -45,7 +48,8 @@ No test framework configured yet. When adding tests:
 - **Files**: PascalCase for components, camelCase for utilities
 
 ### Imports
-- Group imports: React/Next → External libraries → Internal (@/*) → Relative
+
+- Group imports: React/Next → External libraries → Internal (@/\*) → Relative
 - Use `@/*` path alias for all internal imports
 - Use named imports from `lucide-react` (tree-shakeable)
 
@@ -57,6 +61,7 @@ import { Button } from '@/components/ui/button';
 ```
 
 ### Formatting (Prettier)
+
 - Single quotes
 - Trailing commas (ES5 compatible)
 - 100 character line width
@@ -64,6 +69,7 @@ import { Button } from '@/components/ui/button';
 - Semicolons required
 
 ### Components
+
 - Use `function` keyword for component definitions
 - Destructure props in parameter list
 - Use shadcn/ui patterns with `cva` for variants
@@ -76,23 +82,27 @@ function Button({ className, variant = 'default', ...props }: ButtonProps) {
 ```
 
 ### Error Handling
+
 - Use try/catch for async operations
 - Return structured error objects: `{ success: boolean; error?: string }`
 - Log errors to console with context
 - Use `sonner` for user-facing toast notifications
 
 ### Styling
+
 - Use Tailwind CSS utility classes
 - Prefer CSS variables from `globals.css` theme
 - Mobile-first responsive design
 - Use `shadcn/ui` color tokens (e.g., `--color-primary`)
 
 ### API Routes
+
 - Use Next.js App Router convention: `app/api/[route]/route.ts`
 - Return `NextResponse.json()` for consistent responses
 - Handle errors with appropriate HTTP status codes
 
 ### Environment Variables
+
 - Use `.env.local` for local secrets
 - Prefix client-side variables with `NEXT_PUBLIC_`
 - Validate env vars at runtime before use

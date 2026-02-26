@@ -174,8 +174,8 @@ export default function AsignarPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Asignar Menús</h1>
-          <p className="text-gray-600 mt-1">Planifica tu semana asignando menús a cada día</p>
+          <h1 className="text-3xl font-bold text-foreground">Asignar Menús</h1>
+          <p className="text-muted-foreground mt-1">Planifica tu semana asignando menús a cada día</p>
         </div>
 
         <Button
@@ -274,7 +274,7 @@ export default function AsignarPage() {
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
-                <CalendarDays className="w-5 h-5 text-gray-600" />
+                <CalendarDays className="w-5 h-5 text-muted-foreground" />
                 <CardTitle>Vista Semanal</CardTitle>
               </div>
             </CardHeader>
@@ -295,7 +295,7 @@ export default function AsignarPage() {
                         return (
                           <div
                             key={day.value}
-                            className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                            className="flex items-center justify-between p-4 bg-muted rounded-lg"
                           >
                             <div className="flex items-center gap-3">
                               <span className="font-medium w-24">{day.fullLabel}</span>
@@ -310,14 +310,14 @@ export default function AsignarPage() {
                                       className="w-10 h-10 rounded object-cover"
                                     />
                                   ) : (
-                                    <div className="w-10 h-10 bg-gray-200 rounded flex items-center justify-center">
-                                      <ChefHat className="w-5 h-5 text-gray-400" />
+                                    <div className="w-10 h-10 bg-muted rounded flex items-center justify-center">
+                                      <ChefHat className="w-5 h-5 text-muted-foreground" />
                                     </div>
                                   )}
                                   <span className="font-medium">{menu.name}</span>
                                 </div>
                               ) : (
-                                <span className="text-gray-400 italic">Sin asignar</span>
+                                <span className="text-muted-foreground italic">Sin asignar</span>
                               )}
                             </div>
 
@@ -352,20 +352,20 @@ export default function AsignarPage() {
             </CardHeader>
             <CardContent>
               {shoppingList.length === 0 ? (
-                <div className="text-center py-8 text-gray-400">
+                <div className="text-center py-8 text-muted-foreground">
                   <ShoppingCart className="w-12 h-12 mx-auto mb-3 opacity-50" />
                   <p className="text-sm">No hay ingredientes en la lista</p>
                   <p className="text-xs mt-1">Asigna menús para generar la lista</p>
                 </div>
               ) : (
                 <>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-sm text-muted-foreground mb-4">
                     {shoppingList.length} ingredientes necesarios
                   </p>
 
                   <div className="space-y-2">
                     {shoppingList.map((ingredient, index) => (
-                      <div key={index} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
+                      <div key={index} className="flex items-center gap-2 p-2 bg-muted rounded">
                         <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
                         <span className="text-sm capitalize">{ingredient}</span>
                       </div>

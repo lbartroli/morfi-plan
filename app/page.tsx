@@ -130,8 +130,8 @@ export default function Dashboard() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       {/* Header */}
       <div className="mb-4">
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">¡Hola! 👋</h1>
-        <p className="text-sm text-gray-600">Aquí está tu planificación para esta semana</p>
+        <h1 className="text-2xl font-bold text-foreground mb-1">¡Hola! 👋</h1>
+        <p className="text-sm text-muted-foreground">Aquí está tu planificación para esta semana</p>
       </div>
 
       {/* Acciones Rápidas - Compactas */}
@@ -232,8 +232,8 @@ export default function Dashboard() {
                 {currentMeal.menu ? (
                   <div>
                     <div className="flex items-start gap-4 mb-3">
-                      <div className="w-20 h-20 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0 border-2 border-gray-200">
-                        <UtensilsCrossed className="w-8 h-8 text-gray-400" />
+                      <div className="w-20 h-20 rounded-xl bg-muted flex items-center justify-center flex-shrink-0 border-2 border-border">
+                        <UtensilsCrossed className="w-8 h-8 text-muted-foreground" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
@@ -244,7 +244,7 @@ export default function Dashboard() {
                             {MEAL_TYPES.find(m => m.value === currentMeal.mealType)?.label}
                           </Badge>
                         </div>
-                        <h3 className="text-lg font-semibold text-gray-900">
+                        <h3 className="text-lg font-semibold text-foreground">
                           {currentMeal.menu.name}
                         </h3>
                       </div>
@@ -286,14 +286,14 @@ export default function Dashboard() {
                   </div>
                 ) : (
                   <div className="flex items-center gap-4">
-                    <div className="w-20 h-20 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0 border-2 border-gray-200">
-                      <UtensilsCrossed className="w-8 h-8 text-gray-400" />
+                    <div className="w-20 h-20 rounded-xl bg-muted flex items-center justify-center flex-shrink-0 border-2 border-border">
+                      <UtensilsCrossed className="w-8 h-8 text-muted-foreground" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-base font-semibold text-gray-900 mb-0.5">
+                      <h3 className="text-base font-semibold text-foreground mb-0.5">
                         Sin menú asignado
                       </h3>
-                      <p className="text-xs text-gray-600 mb-2">
+                      <p className="text-xs text-muted-foreground mb-2">
                         No hay {currentMeal.mealType === 'almuerzo' ? 'almuerzo' : 'cena'} asignado
                         para hoy
                       </p>
@@ -316,7 +316,7 @@ export default function Dashboard() {
       <Card className="mb-6">
         <CardHeader className="pb-3 pt-4">
           <div className="flex items-center gap-2">
-            <CalendarDays className="w-4 h-4 text-gray-600" />
+            <CalendarDays className="w-4 h-4 text-muted-foreground" />
             <CardTitle className="text-base">Calendario Semanal</CardTitle>
           </div>
         </CardHeader>
@@ -325,7 +325,7 @@ export default function Dashboard() {
           <div className="hidden md:block space-y-3">
             {MEAL_TYPES.map(mealType => (
               <div key={mealType.value}>
-                <h3 className="text-xs font-medium text-gray-500 mb-2 flex items-center gap-1.5">
+                <h3 className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
                   <span>{mealType.icon}</span> <span>{mealType.label}</span>
                 </h3>
                 <div className="grid grid-cols-5 gap-2">
@@ -342,7 +342,7 @@ export default function Dashboard() {
                           <Card
                             className={`cursor-pointer transition-all hover:shadow-md overflow-hidden relative p-2 gap-2 ${
                               shouldHighlight ? 'ring-2 ring-green-500 ring-offset-1' : ''
-                            } ${menu ? '' : 'bg-gray-50'}`}
+                            } ${menu ? '' : 'bg-muted/50'}`}
                           >
                             {menu?.image ? (
                               <>
@@ -384,16 +384,19 @@ export default function Dashboard() {
                               <>
                                 <CardHeader className="pb-0.5 pt-1.5 px-2">
                                   <div className="flex items-center justify-between">
-                                    <span className="font-semibold text-gray-900 text-xs">
+                                    <span className="font-semibold text-foreground text-xs">
                                       {weekDay.label}
                                     </span>
                                     {isToday && (
-                                      <Badge className="bg-green-100 text-green-800 text-[10px] px-1.5 py-0">
+                                      <Badge
+                                        variant="secondary"
+                                        className="text-[10px] px-1.5 py-0"
+                                      >
                                         Hoy
                                       </Badge>
                                     )}
                                   </div>
-                                  <span className="text-[10px] text-gray-500 leading-none">
+                                  <span className="text-[10px] text-muted-foreground leading-none">
                                     {weekDay.date.toLocaleDateString('es-ES', {
                                       day: 'numeric',
                                       month: 'short',
@@ -403,10 +406,10 @@ export default function Dashboard() {
                                 <CardContent className="pt-0 pb-1 px-2">
                                   {menu && (
                                     <div className="flex items-center gap-1">
-                                      <div className="w-6 h-6 bg-gray-200 rounded flex items-center justify-center flex-shrink-0">
-                                        <ChefHat className="w-3 h-3 text-gray-400" />
+                                      <div className="w-6 h-6 bg-muted rounded flex items-center justify-center flex-shrink-0">
+                                        <ChefHat className="w-3 h-3 text-muted-foreground" />
                                       </div>
-                                      <p className="font-medium text-[10px] text-gray-900 line-clamp-1 leading-none">
+                                      <p className="font-medium text-[10px] text-foreground line-clamp-1 leading-none">
                                         {menu.name}
                                       </p>
                                     </div>
@@ -419,11 +422,11 @@ export default function Dashboard() {
                         {menu && (
                           <TooltipContent side="top" className="max-w-[200px]">
                             <p className="font-semibold text-xs mb-1">{menu.name}</p>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-muted-foreground">
                               {menu.ingredients.slice(0, 5).join(', ')}
                             </p>
                             {menu.ingredients.length > 5 && (
-                              <p className="text-xs text-gray-400">
+                              <p className="text-xs text-muted-foreground/70">
                                 y {menu.ingredients.length - 5} más...
                               </p>
                             )}
@@ -463,7 +466,7 @@ export default function Dashboard() {
                           key={weekDay.day}
                           className={`overflow-hidden relative ${
                             shouldHighlight ? 'ring-2 ring-green-500 ring-offset-2' : ''
-                          } ${menu ? '' : 'bg-gray-50'}`}
+                          } ${menu ? '' : 'bg-muted/50'}`}
                         >
                           {menu?.image ? (
                             <>
@@ -505,16 +508,16 @@ export default function Dashboard() {
                             <>
                               <CardHeader className="pb-0.5 pt-2 px-3">
                                 <div className="flex items-center justify-between">
-                                  <span className="font-semibold text-gray-900 text-sm">
+                                  <span className="font-semibold text-foreground text-sm">
                                     {weekDay.fullLabel}
                                   </span>
                                   {isToday && (
-                                    <Badge className="bg-green-100 text-green-800 text-xs">
+                                    <Badge variant="secondary" className="text-xs">
                                       Hoy
                                     </Badge>
                                   )}
                                 </div>
-                                <span className="text-xs text-gray-500 leading-none">
+                                <span className="text-xs text-muted-foreground leading-none">
                                   {weekDay.date.toLocaleDateString('es-ES', {
                                     day: 'numeric',
                                     month: 'short',
@@ -524,15 +527,15 @@ export default function Dashboard() {
                               <CardContent className="pt-0 pb-2 px-3">
                                 {menu ? (
                                   <div className="flex items-center gap-2">
-                                    <div className="w-8 h-8 bg-gray-200 rounded flex items-center justify-center flex-shrink-0">
-                                      <ChefHat className="w-4 h-4 text-gray-400" />
+                                    <div className="w-8 h-8 bg-muted rounded flex items-center justify-center flex-shrink-0">
+                                      <ChefHat className="w-4 h-4 text-muted-foreground" />
                                     </div>
-                                    <p className="font-medium text-sm text-gray-900 line-clamp-1">
+                                    <p className="font-medium text-sm text-foreground line-clamp-1">
                                       {menu.name}
                                     </p>
                                   </div>
                                 ) : (
-                                  <div className="text-center py-1 text-gray-400">
+                                  <div className="text-center py-1 text-muted-foreground">
                                     <ChefHat className="w-5 h-5 mx-auto opacity-50" />
                                   </div>
                                 )}

@@ -142,8 +142,8 @@ export default function MenusPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Biblioteca de Menús</h1>
-          <p className="text-gray-600 mt-1">Gestiona tus recetas y menús favoritos</p>
+          <h1 className="text-3xl font-bold text-foreground">Biblioteca de Menús</h1>
+          <p className="text-muted-foreground mt-1">Gestiona tus recetas y menús favoritos</p>
         </div>
 
         <Button onClick={handleNewMenu}>
@@ -154,7 +154,7 @@ export default function MenusPage() {
 
       {/* Search */}
       <div className="relative mb-6">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
         <Input
           placeholder="Buscar menús o ingredientes..."
           value={searchTerm}
@@ -179,11 +179,11 @@ export default function MenusPage() {
       {filteredMenus.length === 0 ? (
         <Card className="text-center py-16">
           <CardContent>
-            <ChefHat className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <ChefHat className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-foreground mb-2">
               {searchTerm ? 'No se encontraron menús' : 'No hay menús aún'}
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-muted-foreground mb-6">
               {searchTerm
                 ? 'Intenta con otros términos de búsqueda'
                 : 'Comienza creando tu primer menú'}
@@ -205,8 +205,8 @@ export default function MenusPage() {
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={menu.image} alt={menu.name} className="w-full h-48 object-cover" />
                 ) : (
-                  <div className="w-full h-48 bg-gray-100 flex items-center justify-center">
-                    <ImageIcon className="w-12 h-12 text-gray-300" />
+                  <div className="w-full h-48 bg-muted flex items-center justify-center">
+                    <ImageIcon className="w-12 h-12 text-muted-foreground" />
                   </div>
                 )}
 
@@ -235,7 +235,7 @@ export default function MenusPage() {
               </CardHeader>
 
               <CardContent className="pt-0">
-                <p className="text-sm text-gray-600 mb-3">{menu.ingredients.length} ingredientes</p>
+                <p className="text-sm text-muted-foreground mb-3">{menu.ingredients.length} ingredientes</p>
                 <div className="flex flex-wrap gap-1">
                   {menu.ingredients.slice(0, 5).map((ingredient, idx) => (
                     <Badge key={idx} variant="secondary" className="text-xs">
@@ -292,7 +292,7 @@ export default function MenusPage() {
                 onChange={e => setFormData({ ...formData, image: e.target.value })}
                 placeholder="https://ejemplo.com/imagen.jpg"
               />
-              <p className="text-xs text-gray-500">Pega aquí el enlace de una imagen de tu plato</p>
+                <p className="text-xs text-muted-foreground">Pega aquí el enlace de una imagen de tu plato</p>
             </div>
 
             {formData.image && (
