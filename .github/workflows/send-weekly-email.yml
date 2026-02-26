@@ -32,7 +32,8 @@ jobs:
             -d "{\"trigger\": \"$TRIGGER_TYPE\"}" \
             --fail-with-body \
             -w "\nHTTP Status: %{http_code}\n" \
-            -s
+            -s \
+            -L
         env:
           APP_URL: ${{ vars.APP_URL || 'https://morfi-plan.vercel.app' }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
