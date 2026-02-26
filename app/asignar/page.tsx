@@ -365,10 +365,10 @@ export default function AsignarPage() {
                     {shoppingList.length} ingredientes necesarios
                   </p>
 
-                  <div className="space-y-2">
+                  <div className="space-y-2 max-h-[calc(100vh-652px)] overflow-y-auto pr-1">
                     {shoppingList.map((ingredient, index) => (
                       <div key={index} className="flex items-center gap-2 p-2 bg-muted rounded">
-                        <CheckCircle2 className="w-4 h-4 text-green-500 flex-shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
                         <span className="text-sm capitalize">{ingredient}</span>
                       </div>
                     ))}
