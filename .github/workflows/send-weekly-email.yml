@@ -7,13 +7,12 @@ on:
   workflow_dispatch:
     inputs:
       trigger_type:
-        description: 'Trigger type'
+        description: 'Trigger type (manual sends immediately, scheduled checks config time)'
         required: true
-        default: 'manual'
         type: choice
         options:
-          - manual
           - scheduled
+          - manual
 
 jobs:
   send-email:
