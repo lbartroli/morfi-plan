@@ -140,3 +140,9 @@ public/             # Static assets
 - radix-ui: ^1.4.3
 - class-variance-authority: ^0.7.1
 - lucide-react: ^0.575.0
+
+## Git Workflow
+
+- **Never auto-commit changes** - Always ask the user before committing
+- Wait for explicit confirmation before running `git commit` or `git push`
+- **Before committing:** Run `npm run lint` and `npm run format` to ensure code quality
