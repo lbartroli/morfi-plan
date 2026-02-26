@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🍳 Morfi-Plan
 
-## Getting Started
+Aplicación para planificar comidas semanales. Gestiona menús, asigna comidas a días de la semana y recibe listas de compras por email.
 
-First, run the development server:
+## ✨ Características
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- 📅 **Calendario Semanal**: Vista de lunes a viernes con almuerzos y cenas
+- 🍽️ **Biblioteca de Menús**: Crea, edita y organiza tus recetas
+- 📝 **Asignación Simple**: Asigna menús a días específicos
+- 📧 **Emails Automáticos**: Envía la lista de compras semanal (con Resend)
+- 📱 **Responsive**: Diseño optimizado para móviles
+- 🔄 **Sincronización**: Datos persistentes en JSONBin.io
+
+## 🚀 Deploy en Vercel
+
+### 1. Crear cuentas necesarias
+
+#### JSONBin.io (para persistencia de datos)
+1. Ve a [https://jsonbin.io](https://jsonbin.io)
+2. Crea una cuenta gratuita
+3. Obtén tu **API Key** en [https://jsonbin.io/api-keys](https://jsonbin.io/api-keys)
+4. Crea un nuevo bin vacío en [https://jsonbin.io/app/bins/new](https://jsonbin.io/app/bins/new)
+5. Copia el **Bin ID** (está en la URL: `https://jsonbin.io/app/bins/xxxxxxxxxxxxx`)
+
+#### Resend (para envío de emails)
+1. Ve a [https://resend.com](https://resend.com)
+2. Crea una cuenta gratuita
+3. Obtén tu **API Key** en [https://resend.com/api-keys](https://resend.com/api-keys)
+4. Opcional: Verifica tu dominio o usa el dominio por defecto `morfi-plan.resend.dev`
+
+### 2. Configurar Variables de Entorno
+
+En el dashboard de Vercel, agrega estas variables:
+
+```env
+# JSONBin.io
+NEXT_PUBLIC_JSONBIN_API_KEY=tu_api_key_aqui
+NEXT_PUBLIC_JSONBIN_BIN_ID=tu_bin_id_aqui
+
+# Resend
+RESEND_API_KEY=tu_api_key_aqui
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Deploy
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Local development
+npm install
+npm run dev
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Production build
+npm run build
+```
 
-## Learn More
+## 📁 Estructura del Proyecto
 
-To learn more about Next.js, take a look at the following resources:
+```
+morfi-plan/
+├── app/
+│   ├── page.tsx              # Dashboard/Calendario
+│   ├── menus/page.tsx        # Biblioteca de menús
+│   ├── asignar/page.tsx      # Asignar menús
+│   ├── api/send-email/       # API para emails
+│   └── layout.tsx            # Layout principal
+├── components/
+│   ├── Navigation.tsx        # Navegación responsive
+│   └── ui/                   # Componentes shadcn/ui
+├── lib/
+│   ├── types.ts              # Tipos TypeScript
+│   ├── jsonbin.ts            # Cliente JSONBin.io
+│   └── email.ts              # Cliente Resend
+└── .env.example              # Variables de entorno
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Stack Tecnológico
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Framework**: Next.js 15 + React 19
+- **Styling**: Tailwind CSS + shadcn/ui
+- **Storage**: JSONBin.io (free tier)
+- **Email**: Resend (free tier: 100 emails/día)
+- **Icons**: Lucide React
+- **Types**: TypeScript
 
-## Deploy on Vercel
+## 📱 Uso
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Menús**: Crea tus recetas con ingredientes e imágenes
+2. **Asignar**: Planifica tu semana asignando menús a días
+3. **Dashboard**: Ve el calendario semanal y la próxima comida
+4. **Email**: Envía la lista de compras desde la página "Asignar"
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔒 Notas de Seguridad
+
+- Las claves API deben mantenerse privadas
+- `NEXT_PUBLIC_*` son accesibles desde el cliente
+- `RESEND_API_KEY` es solo del servidor (sin NEXT_PUBLIC_)
+
+## 📄 Licencia
+
+MIT
